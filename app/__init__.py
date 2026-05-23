@@ -20,15 +20,18 @@ def create_app():
 
     db.init_app(app)
     login_manager.init_app(app)
-    login_manager.login_view = 'login'
+    login_manager.login_view = 'main.login'
 
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
 
+    from .routes import main
+    app.register_blueprint(main)
+
     with app.app_context():
-        from . import routes
         db.create_all()
+
 
         admin_user = os.getenv('ADMIN_USERNAME')
         admin_pass = os.getenv('ADMIN_PASSWORD')

@@ -17,16 +17,16 @@
                 <ul class="navbar-nav ms-auto">
                     {% if current_user.is_authenticated %}
                         {% if current_user.role == 'admin' %}
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_atendentes') }}">Atendentes</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_relatorios') }}">Relatórios</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.admin_atendentes') }}">Atendentes</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.admin_relatorios') }}">Relatórios</a></li>
                         {% elif current_user.role == 'atendente' %}
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('atendente_painel') }}">Painel de Pedidos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.atendente_painel') }}">Painel de Pedidos</a></li>
                         {% elif current_user.role == 'cliente' %}
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('cliente_pedidos') }}">Meus Pedidos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.cliente_pedidos') }}">Meus Pedidos</a></li>
                         {% endif %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Sair ({{ current_user.username }})</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.logout') }}">Sair ({{ current_user.username }})</a></li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.login') }}">Login</a></li>
                     {% endif %}
                 </ul>
             </div>

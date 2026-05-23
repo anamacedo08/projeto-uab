@@ -42,7 +42,7 @@
             <td>{{ atendente.username }}</td>
             <td>{{ atendente.email }}</td>
             <td>
-                <form action="{{ url_for('deletar_atendente', user_id=atendente.id) }}" method="POST" onsubmit="return confirm('Tem certeza?')">
+                <form action="{{ url_for('main.deletar_atendente', user_id=atendente.id) }}" method="POST" onsubmit="return confirm('Tem certeza?')">
                     <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
                 </form>
             </td>
