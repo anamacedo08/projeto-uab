@@ -8,6 +8,7 @@ Este é um sistema web desenvolvido em Flask para gestão de encomendas de produ
 - **Área do Cliente:** Cadastro, login e realização de pedidos com detalhes personalizados, telefone e endereço detalhado.
 - **Painel do Atendente:** Gestão do fluxo de produção (Pendente -> Em Fabricação -> Enviado) e inserção de código de rastreio.
 - **Painel do Administrador:** Gestão de atendentes, gestão da vitrine de produtos e relatórios de pedidos.
+- **Interface Refinada:** Design responsivo, acessível e com feedback visual em tempo real (loading states, badges de status).
 
 ## Requisitos
 

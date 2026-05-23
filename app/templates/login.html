@@ -3,40 +3,48 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">Login</div>
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Acessar Conta</h5>
+            </div>
             <div class="card-body">
                 <form method="POST">
                     <div class="mb-3">
-                        <label for="username" class="form-label">Usuário ou Email</label>
-                        <input type="text" name="username" class="form-control" id="username" required>
+                        <label for="username" class="form-label fw-bold">Usuário ou Email</label>
+                        <input type="text" name="username" class="form-control" id="username" required placeholder="Digite seu usuário ou email">
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Senha</label>
-                        <input type="password" name="password" class="form-control" id="password" required>
+                        <label for="password" class="form-label fw-bold">Senha</label>
+                        <input type="password" name="password" class="form-control" id="password" required placeholder="Digite sua senha">
                     </div>
-                    <button type="submit" class="btn btn-primary">Entrar</button>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary fw-bold">Entrar</button>
+                    </div>
                 </form>
             </div>
         </div>
 
-        <div class="card mt-4">
-            <div class="card-header">Cadastrar-se (Cliente)</div>
+        <div class="card mt-4 shadow-sm border-0">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Ainda não tem conta? Cadastrar-se</h5>
+            </div>
             <div class="card-body">
                 <form action="{{ url_for('auth.cadastro') }}" method="POST">
                     <div class="mb-3">
-                        <label for="reg_username" class="form-label">Usuário</label>
-                        <input type="text" name="username" class="form-control" id="reg_username" required>
+                        <label for="reg_username" class="form-label fw-bold">Escolha um Usuário</label>
+                        <input type="text" name="username" class="form-control" id="reg_username" required placeholder="Usuário único">
                     </div>
                     <div class="mb-3">
-                        <label for="reg_email" class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" id="reg_email" required>
+                        <label for="reg_email" class="form-label fw-bold">Seu Melhor Email</label>
+                        <input type="email" name="email" class="form-control" id="reg_email" required placeholder="email@exemplo.com">
                     </div>
                     <div class="mb-3">
-                        <label for="reg_password" class="form-label">Senha</label>
-                        <input type="password" name="password" class="form-control" id="reg_password" required>
+                        <label for="reg_password" class="form-label fw-bold">Crie uma Senha Segura</label>
+                        <input type="password" name="password" class="form-control" id="reg_password" required placeholder="Mínimo 6 caracteres">
                     </div>
-                    <button type="submit" class="btn btn-success">Cadastrar</button>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success fw-bold">Criar Minha Conta</button>
+                    </div>
                 </form>
             </div>
         </div>

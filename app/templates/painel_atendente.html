@@ -5,30 +5,46 @@
 
 <div class="row">
     {% for pedido in pedidos %}
-    <div class="col-md-6 mb-4">
-        <div class="card">
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-header d-flex justify-content-between align-items-center {{ 'bg-warning text-dark' if pedido.status == 'Pendente' else 'bg-info text-dark' if pedido.status == 'Em Fabricação Manual' else 'bg-success text-white' }}">
+                <h5 class="mb-0">Pedido #{{ pedido.id }}</h5>
+                <span class="badge {{ 'bg-dark' if pedido.status != 'Enviado' else 'bg-light text-dark' }}">{{ pedido.status }}</span>
+            </div>
             <div class="card-body">
-                <h5 class="card-title">Pedido #{{ pedido.id }} - {{ pedido.cliente.username }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Cliente: <strong>{{ pedido.cliente.username }}</strong></h6>
+                <hr>
                 <p class="card-text"><strong>Detalhes:</strong> {{ pedido.detalhes_produto }}</p>
                 <p class="card-text"><strong>Contato:</strong> {{ pedido.telefone_contato }}</p>
-                <p class="card-text"><strong>Endereço:</strong> {{ pedido.endereco }}, {{ pedido.numero }} - {{ pedido.cidade }}/{{ pedido.estado }} (CEP: {{ pedido.cep }})</p>
-                <p class="card-text"><strong>Status:</strong> <span class="badge bg-secondary">{{ pedido.status }}</span></p>
+                <p class="card-text mb-3"><strong>Endereço:</strong><br>
+                    <small>{{ pedido.endereco }}, {{ pedido.numero }}<br>
+                    {{ pedido.cidade }}/{{ pedido.estado }} - CEP: {{ pedido.cep }}</small>
+                </p>
                 
                 {% if pedido.status == 'Pendente' %}
                     <form action="{{ url_for('atendente.iniciar_fabricacao', pedido_id=pedido.id) }}" method="POST">
-                        <button type="submit" class="btn btn-warning w-100">Iniciar Fabricação Manual</button>
+                        <button type="submit" class="btn btn-warning w-100 fw-bold">Iniciar Fabricação Manual</button>
                     </form>
                 {% elif pedido.status == 'Em Fabricação Manual' %}
                     <form action="{{ url_for('atendente.enviar_pedido', pedido_id=pedido.id) }}" method="POST">
-                        <div class="input-group">
-                            <input type="text" name="codigo_rastreio" class="form-control" placeholder="Código de Rastreio" required>
-                            <button type="submit" class="btn btn-success">Despachar e Enviar</button>
+                        <div class="mb-2">
+                            <label for="rastreio-{{ pedido.id }}" class="form-label visually-hidden">Código de Rastreio</label>
+                            <input type="text" id="rastreio-{{ pedido.id }}" name="codigo_rastreio" class="form-control" placeholder="Código de Rastreio" required>
                         </div>
+                        <button type="submit" class="btn btn-success w-100 fw-bold">Despachar e Enviar</button>
                     </form>
                 {% else %}
-                    <p class="text-success"><strong>Rastreio:</strong> {{ pedido.codigo_rastreio }}</p>
+                    <div class="alert alert-success py-2 mb-0">
+                        <strong>Rastreio:</strong> <code>{{ pedido.codigo_rastreio }}</code>
+                    </div>
                 {% endif %}
             </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <div class="alert alert-light border shadow-sm">
+            <p class="mb-0 text-muted">Não há pedidos pendentes ou em processamento no momento.</p>
         </div>
     </div>
     {% endfor %}

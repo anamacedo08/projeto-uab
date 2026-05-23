@@ -14,20 +14,22 @@
     </div>
 </div>
 
-<div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mb-5">
     {% for produto in produtos %}
     <div class="col">
-        <div class="card h-100">
-            <img src="{{ produto.imagem_url }}" class="card-img-top" alt="{{ produto.nome }}" style="height: 200px; object-fit: cover;">
+        <div class="card h-100 shadow-sm">
+            <img src="{{ produto.imagem_url }}" class="card-img-top img-fluid" alt="Imagem de {{ produto.nome }}" style="height: 200px; object-fit: cover;">
             <div class="card-body">
-                <h5 class="card-title">{{ produto.nome }}</h5>
-                <p class="card-text">{{ produto.descricao }}</p>
+                <h5 class="card-title text-primary">{{ produto.nome }}</h5>
+                <p class="card-text text-secondary">{{ produto.descricao }}</p>
             </div>
         </div>
     </div>
     {% else %}
-    <div class="col-12 text-center">
-        <p class="text-muted">Nenhum produto em destaque no momento.</p>
+    <div class="col-12 text-center py-5">
+        <div class="alert alert-light border shadow-sm">
+            <p class="mb-0 text-muted">Nenhum produto em destaque no momento. Volte em breve!</p>
+        </div>
     </div>
     {% endfor %}
 </div>

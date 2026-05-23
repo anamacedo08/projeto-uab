@@ -54,6 +54,17 @@ Cenários focados em impedir o acesso indevido entre diferentes perfis de usuár
 | TC-19 | Background Notification | Assíncrono | Alta | Verificar se a função de notificação é disparada sem bloquear a resposta HTTP. |
 | TC-20 | Cache de Relatórios | Performance | Média | Validar persistência do cache de métricas por 120 segundos. |
 
+### 2.6. Frontend e Experiência do Usuário (UX)
+| ID | Cenário | Tipo | Prioridade | Descrição |
+|:---|:---|:---|:---|:---|
+| TC-21 | Responsividade de Tabelas | Visual | Média | Verificar se as tabelas de pedidos e produtos possuem `.table-responsive`. |
+| TC-22 | Cores de Status de Pedido | Visual | Alta | Garantir que o status 'Enviado' exiba badge verde e 'Pendente' exiba badge amarelo. |
+| TC-23 | Acessibilidade: Navegação | A11y | Alta | Validar se o link da página atual no navbar possui `aria-current="page"`. |
+| TC-24 | Acessibilidade: Formulários | A11y | Crítica | Verificar se todos os inputs nos formulários de Pedido e Cadastro possuem labels associados. |
+| TC-25 | Validação de CEP | Funcional | Alta | Tentar enviar CEP inválido e verificar se a validação HTML5 bloqueia o envio. |
+| TC-26 | Estado Vazio: Vitrine | Visual | Baixa | Garantir exibição de mensagem "Nenhum produto encontrado" quando a lista estiver vazia. |
+| TC-27 | Feedback de Loading | Visual | Média | Verificar se botões de submit mostram spinner visual após o clique. |
+
 ---
 
 ## 3. Ambiente e Execução

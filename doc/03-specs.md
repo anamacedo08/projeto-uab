@@ -212,3 +212,29 @@ Bloco content:
         Card 2: Pedidos Aguardando -> {{ metricas.pendentes }}
         Card 3: Em Produção -> {{ metricas.em_fabricacao }}
         Card 4: Total Enviados -> {{ metricas.enviados }}
+
+---
+
+## 6. Requisitos de Frontend e UX
+
+### 6.1. Comportamento Visual e Estados
+- **Cores de Status:**
+  - `Pendente`: Amarelo (`bg-warning text-dark`).
+  - `Em Fabricação Manual`: Azul (`bg-info text-dark`).
+  - `Enviado`: Verde (`bg-success`).
+- **Feedback de Carregamento:** Botões de formulário devem exibir um spinner e ser desabilitados durante o envio (via JavaScript básico ou comportamento de submissão).
+- **Estados Vazios:** Todas as listagens (produtos, pedidos, atendentes) devem exibir uma mensagem amigável quando não houver dados.
+
+### 6.2. Responsividade
+- **Mobile First:** Uso rigoroso de classes de grid do Bootstrap (`row`, `col-12`, `col-md-*`).
+- **Tabelas:** Devem ser envoltas em `.table-responsive` para garantir rolagem lateral em dispositivos pequenos.
+- **Imagens:** Devem utilizar `.img-fluid` e ter altura fixa com `object-fit: cover` em cartões.
+
+### 6.3. Acessibilidade (A11y)
+- **Navegação:** Uso de `aria-current="page"` no link ativo da barra de navegação.
+- **Formulários:** Todo `input` deve ter um `label` explicitamente associado via `for` e `id`.
+- **Interação:** Foco visível em todos os elementos interativos. Botões de fechar e ícones devem ter `aria-label`.
+
+### 6.4. Validações e Formulários
+- **Validação Nativa:** Uso de atributos HTML5 como `required`, `pattern` (para CEP: `[0-9]{5}-?[0-9]{3}`), `minlength` e `maxlength`.
+- **Feedback Visual:** Uso das classes `.is-invalid` e `.invalid-feedback` do Bootstrap para erros de validação.
