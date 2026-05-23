@@ -64,16 +64,20 @@ Cenários focados em impedir o acesso indevido entre diferentes perfis de usuár
 | TC-19 | Background Notification | Assíncrono | Alta | Verificar se a função de notificação é disparada sem bloquear a resposta HTTP. |
 | TC-20 | Cache de Relatórios | Performance | Média | Validar persistência do cache de métricas por 120 segundos. |
 
-### 2.6. Frontend e Experiência do Usuário (UX)
+### 2.6. Frontend, UX e Acessibilidade (Novos Requisitos)
+Cenários focados na experiência do usuário e conformidade visual.
+
 | ID | Cenário | Tipo | Prioridade | Descrição |
 |:---|:---|:---|:---|:---|
-| TC-21 | Responsividade de Tabelas | Visual | Média | Verificar se as tabelas de pedidos e produtos possuem `.table-responsive`. |
-| TC-22 | Cores de Status de Pedido | Visual | Alta | Garantir que o status 'Enviado' exiba badge verde e 'Pendente' exiba badge amarelo. |
-| TC-23 | Acessibilidade: Navegação | A11y | Alta | Validar se o link da página atual no navbar possui `aria-current="page"`. |
-| TC-24 | Acessibilidade: Formulários | A11y | Crítica | Verificar se todos os inputs nos formulários de Pedido e Cadastro possuem labels associados. |
-| TC-25 | Validação de CEP | Funcional | Alta | Tentar enviar CEP inválido e verificar se a validação HTML5 bloqueia o envio. |
-| TC-26 | Estado Vazio: Vitrine | Visual | Baixa | Garantir exibição de mensagem "Nenhum produto encontrado" quando a lista estiver vazia. |
-| TC-27 | Feedback de Loading | Visual | Média | Verificar se botões de submit mostram spinner visual após o clique. |
+| TC-21 | Responsividade Global | Visual | Alta | Verificar se o layout se ajusta corretamente em 320px (Mobile), 768px (Tablet) e 1200px (Desktop). |
+| TC-22 | Contraste e Acessibilidade | A11y | Crítica | Validar se o contraste das cores do Design System atende ao nível AA da WCAG (4.5:1). |
+| TC-23 | Navegação por Teclado | A11y | Alta | Garantir que todos os elementos interativos sejam acessíveis via `Tab` e possuam foco visível. |
+| TC-24 | Feedback de Loading (Global) | Visual | Média | Verificar se todos os botões de `submit` mostram spinner e desabilitam após o clique. |
+| TC-25 | Espaçamento de Ações | Visual | Média | Validar se os botões de "Editar" e "Excluir" na tela de produtos possuem espaçamento visível (mínimo 8px). |
+| TC-26 | Estados Vazios e Ilustrações | Visual | Baixa | Garantir que telas sem dados exibam mensagens amigáveis e ícones representativos. |
+| TC-27 | Validações Visuais de Form | Funcional | Alta | Verificar se campos inválidos recebem a borda vermelha (`.is-invalid`) e mensagem de erro clara. |
+| TC-28 | Logo e Identidade Visual | Visual | Média | Confirmar se o novo logo SVG é renderizado corretamente em todas as páginas via `base.html`. |
+| TC-29 | Transições e Hover | Visual | Baixa | Validar o efeito de elevação (`translateY`) em cards de produtos ao passar o mouse. |
 
 ---
 

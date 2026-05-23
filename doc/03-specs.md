@@ -249,24 +249,56 @@ Bloco content:
 
 ## 6. Requisitos de Frontend e UX
 
-### 6.1. Comportamento Visual e Estados
+### 6.1. Identidade Visual e Design System
+O sistema deve adotar uma identidade visual vibrante e profissional, inspirada em trabalhos manuais e artesanais.
+
+- **Paleta de Cores:**
+  - **Primária (Artesanal):** `#6366f1` (Indigo - Moderno e confiável).
+  - **Secundária (Destaque):** `#f59e0b` (Amber - Caloroso e amigável).
+  - **Sucesso:** `#10b981` (Emerald).
+  - **Perigo:** `#ef4444` (Rose).
+  - **Fundo:** `#f8fafc` (Slate 50 - Neutro e limpo).
+- **Tipografia:** Fonte Sans-Serif moderna (Inter ou System Default).
+- **Logo:** Um ícone SVG minimalista representando uma ferramenta de artesão ou uma mão criando, posicionado ao lado do nome da marca.
+- **Sombras:** Uso de `shadow-sm` para cartões e `shadow` para modais e elementos em destaque.
+- **Bordas:** Arredondamento suave (`border-radius: 0.5rem`).
+
+### 6.2. Comportamento Visual e Estados
+- **Feedback de Interação:** 
+  - Botões e links devem ter transições suaves (`transition: all 0.2s`).
+  - Hover em cartões de produtos deve elevar levemente o elemento (`transform: translateY(-2px)`).
 - **Cores de Status:**
-  - `Pendente`: Amarelo (`bg-warning text-dark`).
-  - `Em Fabricação Manual`: Azul (`bg-info text-dark`).
-  - `Enviado`: Verde (`bg-success`).
-- **Feedback de Carregamento:** Botões de formulário devem exibir um spinner e ser desabilitados durante o envio (via JavaScript básico ou comportamento de submissão).
-- **Estados Vazios:** Todas as listagens (produtos, pedidos, atendentes) devem exibir uma mensagem amigável quando não houver dados.
+  - `Pendente`: Amarelo (`#f59e0b`).
+  - `Em Fabricação Manual`: Azul (`#0ea5e9`).
+  - `Enviado`: Verde (`#10b981`).
+- **Feedback de Carregamento:** 
+  - Botões de formulário devem exibir um spinner e texto "Processando..." ao serem clicados.
+  - Skeletons devem ser usados em carregamentos de listas longas (opcional para esta fase, priorizar spinners).
+- **Estados Vazios:** 
+  - Ilustração simples ou ícone acompanhado de texto instrutivo (ex: "Ainda não há pedidos. Que tal começar um agora?").
 
-### 6.2. Responsividade
-- **Mobile First:** Uso rigoroso de classes de grid do Bootstrap (`row`, `col-12`, `col-md-*`).
-- **Tabelas:** Devem ser envoltas em `.table-responsive` para garantir rolagem lateral em dispositivos pequenos.
-- **Imagens:** Devem utilizar `.img-fluid` e ter altura fixa com `object-fit: cover` em cartões.
+### 6.3. Componentes de Interface
+- **Navbar:** Fixa no topo, com fundo gradiente ou cor sólida escura contrastante.
+- **Cards:** Estrutura consistente com imagem, título em destaque e descrição curta.
+- **Botões de Ação:** 
+  - Botões de "Alterar" e "Excluir" devem ter espaçamento claro (`gap-2` ou `margin`).
+  - Cores semânticas consistentes (Azul/Verde para ações positivas, Vermelho para negativas).
 
-### 6.3. Acessibilidade (A11y)
-- **Navegação:** Uso de `aria-current="page"` no link ativo da barra de navegação.
-- **Formulários:** Todo `input` deve ter um `label` explicitamente associado via `for` e `id`.
-- **Interação:** Foco visível em todos os elementos interativos. Botões de fechar e ícones devem ter `aria-label`.
+### 6.4. Responsividade
+- **Breakpoints:**
+  - **Mobile (< 576px):** Layout em coluna única, botões em largura total (`w-100`).
+  - **Tablet (576px - 992px):** Grid de 2 colunas para cards.
+  - **Desktop (> 992px):** Layout completo com sidebar ou grid de 3+ colunas.
+- **Tabelas:** Devem ser envoltas em `.table-responsive` e, em telas muito pequenas, considerar a transição para visualização em cards.
 
-### 6.4. Validações e Formulários
-- **Validação Nativa:** Uso de atributos HTML5 como `required`, `pattern` (para CEP: `[0-9]{5}-?[0-9]{3}`), `minlength` e `maxlength`.
-- **Feedback Visual:** Uso das classes `.is-invalid` e `.invalid-feedback` do Bootstrap para erros de validação.
+### 6.5. Acessibilidade (A11y)
+- **Navegação por Teclado:** Ordem lógica de tabulação (`tabindex`). Foco visível com contorno contrastante.
+- **Labels e ARIA:**
+  - Todos os inputs com `<label>` associado.
+  - `aria-label` em botões de ícone.
+  - `role="alert"` para mensagens de erro/sucesso (Flashes).
+- **Contraste:** Garantir relação de contraste mínima de 4.5:1 para textos normais.
+
+### 6.6. Validações e Formulários
+- **Validação Visual:** Classes `.is-invalid` aplicadas dinamicamente se houver erro no servidor ou validação client-side.
+- **Mensagens de Erro:** Posicionadas imediatamente abaixo do campo, em vermelho e com ícone de alerta.

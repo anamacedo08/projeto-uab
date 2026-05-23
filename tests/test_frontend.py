@@ -40,10 +40,32 @@ def test_pedido_status_badges(app, client):
     response = client.get('/clientes/pedidos')
     
     assert response.status_code == 200
-    # Pendente -> bg-warning
-    assert b'bg-warning text-dark">Pendente</span>' in response.data
-    # Enviado -> bg-success
-    assert b'bg-success">Enviado</span>' in response.data
+    # Pendente -> var(--secondary-color)
+    assert b'style="background-color: var(--secondary-color); color: #000;">Pendente</span>' in response.data
+    # Enviado -> var(--success-color)
+    assert b'style="background-color: var(--success-color); color: #fff;">Enviado</span>' in response.data
+
+def test_logo_rendered(client):
+    """TC-28: Confirmar se o novo logo SVG é renderizado correctly"""
+    response = client.get('/')
+    assert response.status_code == 200
+    assert b'<svg width="32" height="32" viewBox="0 0 24 24" class="logo-icon"' in response.data
+    assert b'ArtesaLab' in response.data
+
+def test_product_actions_spacing(app, client):
+    """TC-25: Validar se os botões de "Editar" e "Excluir" na tela de produtos possuem espaçamento (gap-2)"""
+    with app.app_context():
+        admin = User(username='admin_test', email='admin@test.com',
+                    password_hash=generate_password_hash('password'), role='admin')
+        db.session.add(admin)
+        p = Produto(nome='P1', descricao='D1', imagem_url='http://img.com')
+        db.session.add(p)
+        db.session.commit()
+
+    client.post('/login', data={'username': 'admin_test', 'password': 'password'})
+    response = client.get('/admin/produtos')
+    assert response.status_code == 200
+    assert b'd-flex justify-content-center gap-2' in response.data
 
 def test_form_validation_attributes(app, client):
     """TC-25: Verificar se a validação HTML5 (pattern para CEP) está presente"""

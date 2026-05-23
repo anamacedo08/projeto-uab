@@ -1,27 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="p-5 mb-4 bg-light rounded-3">
+<div class="p-5 mb-5 text-white rounded-4 shadow" style="background: linear-gradient(135deg, var(--primary-color) 0%, #4338ca 100%);">
     <div class="container-fluid py-5 text-center">
-        <h1 class="display-5 fw-bold">Bem-vindo ao Artesanato Personalizado</h1>
-        <p class="col-md-12 fs-4">Explore nossos produtos artesanais exclusivos e feitos sob medida para você.</p>
+        <h1 class="display-4 fw-bolder mb-3">Artesanato que Conta Histórias</h1>
+        <p class="col-md-10 mx-auto fs-5 opacity-90 mb-4">Explore nossa curadoria de produtos exclusivos, feitos à mão com paixão e precisão para transformar sua rotina.</p>
         {% if not current_user.is_authenticated %}
-            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg px-4 me-md-2">Login</a>
-                <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#cadastroModal">Cadastrar-se</button>
+            <div class="d-grid gap-3 d-md-flex justify-content-md-center mt-4">
+                <a href="{{ url_for('auth.login') }}" class="btn btn-light btn-lg px-5 fw-bold shadow-sm" style="color: var(--primary-color);">Entrar agora</a>
+                <button type="button" class="btn btn-outline-light btn-lg px-5 fw-bold" data-bs-toggle="modal" data-bs-target="#cadastroModal">Criar conta grátis</button>
             </div>
         {% endif %}
     </div>
 </div>
 
+<div class="d-flex align-items-center mb-4">
+    <h2 class="h3 fw-bold mb-0">Nossa Vitrine</h2>
+    <div class="ms-3 flex-grow-1 border-bottom opacity-25"></div>
+</div>
+
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 mb-5">
     {% for produto in produtos %}
     <div class="col">
-        <div class="card h-100 shadow-sm">
-            <img src="{{ produto.imagem_url }}" class="card-img-top img-fluid" alt="Imagem de {{ produto.nome }}" style="height: 200px; object-fit: cover;">
-            <div class="card-body">
-                <h5 class="card-title text-primary">{{ produto.nome }}</h5>
-                <p class="card-text text-secondary">{{ produto.descricao }}</p>
+        <div class="card h-100 shadow-sm border-0 overflow-hidden">
+            <div class="position-relative">
+                <img src="{{ produto.imagem_url }}" class="card-img-top" alt="Imagem de {{ produto.nome }}" style="height: 220px; object-fit: cover;">
+                <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-white text-dark shadow-sm">Novo</span>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <h5 class="card-title fw-bold text-dark mb-2">{{ produto.nome }}</h5>
+                <p class="card-text text-muted small mb-0">{{ produto.descricao }}</p>
+            </div>
+            <div class="card-footer bg-white border-0 p-4 pt-0">
+                <button class="btn btn-outline-primary w-100 fw-bold rounded-pill">Ver Detalhes</button>
             </div>
         </div>
     </div>

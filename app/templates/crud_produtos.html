@@ -53,12 +53,12 @@
                                 <td class="fw-bold text-primary">{{ produto.nome }}</td>
                                 <td><small class="text-muted">{{ produto.descricao }}</small></td>
                                 <td class="text-center">
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-sm btn-outline-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ produto.id }}">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <button type="button" class="btn btn-sm btn-outline-primary shadow-sm px-3" data-bs-toggle="modal" data-bs-target="#editModal{{ produto.id }}">
                                             Editar
                                         </button>
                                         <form action="{{ url_for('admin.deletar_produto', produto_id=produto.id) }}" method="POST" onsubmit="return confirm('Deseja realmente excluir este produto?')">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm px-3">
                                                 Excluir
                                             </button>
                                         </form>

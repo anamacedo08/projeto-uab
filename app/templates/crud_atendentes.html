@@ -3,32 +3,37 @@
 {% block content %}
 <h2>Gestão de Atendentes</h2>
 
-<div class="card mb-4 shadow-sm border-0">
-    <div class="card-header bg-primary text-white">Cadastrar Novo Atendente</div>
-    <div class="card-body">
+<div class="card mb-5 shadow border-0">
+    <div class="card-header bg-white border-bottom py-3">
+        <h5 class="mb-0 fw-bold text-primary">Cadastrar Novo Atendente</h5>
+    </div>
+    <div class="card-body p-4">
         <form method="POST">
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <label for="username" class="form-label visually-hidden">Usuário</label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Usuário" required>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <label for="username" class="form-label fw-bold small text-muted">NOME DE USUÁRIO</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Ex: joao_silva" required>
                 </div>
-                <div class="col-md-3">
-                    <label for="email" class="form-label visually-hidden">Email</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
+                <div class="col-md-4">
+                    <label for="email" class="form-label fw-bold small text-muted">E-MAIL PROFISSIONAL</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="joao@artesalab.com" required>
                 </div>
-                <div class="col-md-3">
-                    <label for="password" class="form-label visually-hidden">Senha</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Senha" required>
+                <div class="col-md-4">
+                    <label for="password" class="form-label fw-bold small text-muted">SENHA TEMPORÁRIA</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
                 </div>
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary w-100 fw-bold">Adicionar Atendente</button>
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-primary px-5 fw-bold shadow-sm">Adicionar à Equipe</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 
-<h3 class="mb-3">Lista de Atendentes</h3>
+<div class="d-flex align-items-center mb-4">
+    <h3 class="h4 fw-bold mb-0">Lista de Atendentes</h3>
+    <span class="badge bg-light text-dark ms-3 border">{{ atendentes|length }} membros</span>
+</div>
 <div class="table-responsive shadow-sm rounded">
     <table class="table table-hover align-middle mb-0">
         <thead class="table-dark">

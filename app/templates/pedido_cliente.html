@@ -68,31 +68,33 @@
                 <td>{{ pedido.detalhes_produto }}</td>
                 <td>
                     {% if pedido.status == 'Pendente' %}
-                        <span class="badge bg-warning text-dark">{{ pedido.status }}</span>
+                        <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--secondary-color); color: #000;">{{ pedido.status }}</span>
                     {% elif pedido.status == 'Em Fabricação Manual' %}
-                        <span class="badge bg-info text-dark">{{ pedido.status }}</span>
+                        <span class="badge py-2 px-3 shadow-sm" style="background-color: #0ea5e9; color: #fff;">{{ pedido.status }}</span>
                     {% elif pedido.status == 'Enviado' %}
-                        <span class="badge bg-success">{{ pedido.status }}</span>
+                        <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--success-color); color: #fff;">{{ pedido.status }}</span>
                     {% else %}
-                        <span class="badge bg-secondary">{{ pedido.status }}</span>
+                        <span class="badge bg-secondary py-2 px-3">{{ pedido.status }}</span>
                     {% endif %}
                 </td>
                 <td>
                     {% if pedido.codigo_rastreio %}
-                        <code class="text-primary">{{ pedido.codigo_rastreio }}</code>
+                        <code class="text-primary fw-bold">{{ pedido.codigo_rastreio }}</code>
                     {% else %}
-                        <span class="text-muted italic">Aguardando...</span>
+                        <span class="text-muted small"><em>Em processamento</em></span>
                     {% endif %}
                 </td>
                 <td><small class="text-muted">{{ pedido.data_criacao.strftime('%d/%m/%Y %H:%M') }}</small></td>
                 <td>
                     {% if pedido.status == 'Pendente' %}
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ pedido.id }}">
-                        Editar
-                    </button>
-                    <form action="{{ url_for('cliente.deletar_pedido', pedido_id=pedido.id) }}" method="POST" class="d-inline">
-                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Tem certeza que deseja deletar este pedido?')">Deletar</button>
-                    </form>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-sm btn-outline-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ pedido.id }}">
+                            Editar
+                        </button>
+                        <form action="{{ url_for('cliente.deletar_pedido', pedido_id=pedido.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm" onclick="return confirm('Tem certeza que deseja deletar este pedido?')">Deletar</button>
+                        </form>
+                    </div>
 
                     <!-- Edit Modal -->
                     <div class="modal fade" id="editModal{{ pedido.id }}" tabindex="-1" aria-labelledby="editModalLabel{{ pedido.id }}" aria-hidden="true">
