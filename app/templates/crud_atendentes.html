@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Gestão de Atendentes</h2>
+
+<div class="card mb-4">
+    <div class="card-header">Cadastrar Novo Atendente</div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="text" name="username" class="form-control" placeholder="Usuário" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="email" name="email" class="form-control" placeholder="Email" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="password" name="password" class="form-control" placeholder="Senha" required>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">Adicionar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<h3>Lista de Atendentes</h3>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Usuário</th>
+            <th>Email</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for atendente in atendentes %}
+        <tr>
+            <td>{{ atendente.id }}</td>
+            <td>{{ atendente.username }}</td>
+            <td>{{ atendente.email }}</td>
+            <td>
+                <form action="{{ url_for('deletar_atendente', user_id=atendente.id) }}" method="POST" onsubmit="return confirm('Tem certeza?')">
+                    <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Login</div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Usuário ou Email</label>
+                        <input type="text" name="username" class="form-control" id="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha</label>
+                        <input type="password" name="password" class="form-control" id="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">Cadastrar-se (Cliente)</div>
+            <div class="card-body">
+                <form action="{{ url_for('cadastro') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="reg_username" class="form-label">Usuário</label>
+                        <input type="text" name="username" class="form-control" id="reg_username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="reg_email" class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" id="reg_email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="reg_password" class="form-label">Senha</label>
+                        <input type="password" name="password" class="form-control" id="reg_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Cadastrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

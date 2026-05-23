@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Relatório de Pedidos</h2>
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Total Geral</h5>
+                <p class="card-text display-4">{{ metricas.total }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Aguardando</h5>
+                <p class="card-text display-4">{{ metricas.pendentes }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Em Produção</h5>
+                <p class="card-text display-4">{{ metricas.em_fabricacao }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Enviados</h5>
+                <p class="card-text display-4">{{ metricas.enviados }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
