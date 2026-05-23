@@ -46,14 +46,13 @@ Cenários focados em impedir o acesso indevido entre diferentes perfis de usuár
 | TC-10 | Transição de Status (Fabricação) | Integração | Alta | Atendente altera pedido de 'Pendente' para 'Em Fabricação Manual'. |
 | TC-11 | Finalização e Rastreio | Integração | Alta | Atendente insere código de rastreio e muda status para 'Enviado'. |
 
-### 2.4. Administração e Vitrine
+### 2.5. Otimização e Desempenho
 | ID | Cenário | Tipo | Prioridade | Descrição |
 |:---|:---|:---|:---|:---|
-| TC-12 | CRUD de Atendentes | Integração | Alta | Admin cria e remove usuários com papel de 'atendente'. |
-| TC-13 | CRUD de Produtos | Integração | Alta | Admin cadastra novos produtos (nome, descrição, imagem) e os remove. |
-| TC-14 | Vitrine na Home | Integração | Alta | Validar se produtos cadastrados pelo Admin aparecem na tela inicial para visitantes. |
-| TC-15 | Links de Acesso na Home | Integração | Média | Verificar se links de login e cadastro estão funcionais na tela inicial. |
-| TC-16 | Integridade do Relatório | Unidade | Média | Validar se a contagem de pedidos por status no relatório bate com o banco de dados. |
+| TC-17 | Cache de Produtos | Performance | Média | Validar se a segunda chamada à lista de produtos não executa query no banco. |
+| TC-18 | Invalidação de Cache | Performance | Média | Garantir que ao criar um produto, o cache 'all_products' seja removido. |
+| TC-19 | Background Notification | Assíncrono | Alta | Verificar se a função de notificação é disparada sem bloquear a resposta HTTP. |
+| TC-20 | Cache de Relatórios | Performance | Média | Validar persistência do cache de métricas por 120 segundos. |
 
 ---
 

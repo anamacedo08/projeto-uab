@@ -1,127 +1,48 @@
 # Especificação Técnica do Sistema (03-especs.md)
 
-Este documento detalha a especificação técnica dos arquivos do Sistema de Encomenda de Produtos Artesanais Personalizados, mapeando ações, escopo e comportamento lógico.
+Este documento detalha a arquitetura e especificações técnicas do Sistema de Encomenda de Produtos Artesanais Personalizados, incluindo as otimizações de performance e modularização.
 
 ---
 
-## 1. Arquivos de Configuração e Ambiente
+## 1. Arquitetura do Sistema
+O sistema segue o padrão **MVC (Model-View-Controller)** com uma camada adicional de **Serviços** para isolar a lógica de negócio.
 
-### `/requirements.txt`
-- **ação:** criar
-- **descrição:** Define as bibliotecas e dependências externas necessárias para a execução e persistência de dados do ecossistema Flask.
-- **pseudocódigo:**
-  ```text
-  Flask==2.3.x
-  Flask-SQLAlchemy==3.x
-  Flask-Login==0.6.x
-  Werkzeug==2.3.x
-/.gitignore
-ação: criar
+- **Camada de Dados (Models):** SQLAlchemy para mapeamento objeto-relacional.
+- **Camada de Serviços (Services):** Centraliza a lógica de negócio, interações com o DB, Cache e disparo de Jobs.
+- **Camada de Controle (Routes/Blueprints):** Gerencia as requisições HTTP e delega as ações para os Serviços.
+- **Otimização:** 
+    - **Cache:** Flask-Caching para rotas de leitura intensa (Home e Relatórios).
+    - **Background Jobs:** Flask-Executor para processamento assíncrono (Notificações de status).
 
-descrição: Exclui diretórios locais de ambiente virtual, caches do Python e arquivos locais de banco de dados do controle de versão Git.
+---
 
-pseudocódigo:
+## 2. Camada de Serviços (Business Logic)
 
-Plaintext
-venv/
-__pycache__/
-*.sqlite3
-*.db
-.env
-/Dockerfile
-ação: criar
+### `app/services/product_service.py`
+- `get_all_products()`: Retorna todos os produtos (Cached: 60s).
+- `create_product(nome, descricao, imagem_url)`: Cria produto e limpa cache.
+- `delete_product(produto_id)`: Remove produto e limpa cache.
 
-descrição: Configura o roteiro automatizado para construção da imagem Docker isolada da aplicação.
+### `app/services/user_service.py`
+- `create_user(username, email, password, role)`: Cria usuário (Admin/Atendente/Cliente).
+- `get_atendentes()`: Lista usuários com role 'atendente'.
+- `delete_user(user_id)`: Remove usuário do sistema.
 
-pseudocódigo:
+### `app/services/order_service.py`
+- `create_order(...)`: Registra novo pedido e limpa cache de métricas.
+- `get_orders_by_client(cliente_id)`: Lista pedidos de um cliente específico.
+- `get_all_orders()`: Lista todos os pedidos (para Atendentes).
+- `update_status(pedido_id, status, codigo_rastreio)`: Atualiza status do pedido, limpa cache e dispara **Background Job** de notificação.
+- `get_metrics()`: Calcula estatísticas de pedidos (Cached: 120s).
 
-Dockerfile
-FROM python:3.9-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
-EXPOSE 5000
-CMD ["python", "run.py"]
-2. Inicialização do Sistema
-/run.py
-ação: criar
+---
 
-descrição: Script de ponto de entrada. Instancia o servidor web embutido apontando para a aplicação configurada.
+## 3. Inicialização e Configuração
+### `/app/__init__.py`
+- Inicializa extensões: `SQLAlchemy`, `LoginManager`, `Cache`, `Executor`.
+- Configura o Administrador padrão via variáveis de ambiente.
 
-pseudocódigo:
-
-Python
-importar 'app' do modulo 'app'
-se __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
-/app/__init__.py
-ação: criar
-
-descrição: Configura a Application Factory do Flask, lê as variáveis de ambiente essenciais, registra os Blueprints e injeta deterministicamente o Administrador padrão no banco de dados na primeira execução.
-
-pseudocódigo:
-
-Python
-def create_app():
-    instanciar Flask(app)
-    app.config['SECRET_KEY'] = ler_variavel_ambiente('SECRET_KEY')
-    app.config['SQLALCHEMY_DATABASE_URI'] = ler_variavel_ambiente('DATABASE_URL')
-
-    inicializar db(app)
-    inicializar login_manager(app)
-
-    importar Blueprint 'main' de 'routes'
-    registrar_blueprint(main)
-
-    com app.app_context():
-        db.create_all() # Garante a existência física das tabelas SQLite
-
-        admin_user = ler_variavel_ambiente('ADMIN_USERNAME')
-        admin_pass = ler_variavel_ambiente('ADMIN_PASSWORD')
-
-        se nao existir Usuario com username == admin_user no banco:
-            novo_admin = Usuario(username=admin_user, email='admin@example.com', password=gerar_hash(admin_pass), role='admin')
-            db.session.add(novo_admin)
-            db.session.commit()
-    
-    retornar app
-
-3. Camada de Dados (Persistência)
-/app/models.py
-ação: criar
-
-descrição: Mapeamento Objeto-Relacional (ORM) das entidades de Usuários e Pedidos estruturados conforme as regras de negócio.
-
-pseudocódigo:
-
-Python
-classe User(db.Model, UserMixin):
-    id = Inteiro, Chave Primaria
-    username = String(80), Unico, Nao Nulo
-    email = String(80), Unico, Nao Nulo
-    password_hash = String(128), Nao Nulo
-    role = String(20), Nao Nulo # Domínio fechado: 'admin', 'atendente', 'cliente'
-
-classe Produto(db.Model):
-    id = Inteiro, Chave Primaria
-    nome = String(100), Nao Nulo
-    descricao = Texto, Nao Nulo
-    imagem_url = String(255), Nao Nulo # URL ou caminho da imagem do produto
-
-classe Pedido(db.Model):
-    id = Inteiro, Chave Primaria
-    cliente_id = Inteiro, Chave Estrangeira(User.id), Nao Nulo
-    detalhes_produto = Texto, Nao Nulo
-    telefone_contato = String(20), Nao Nulo
-    cep = String(9), Nao Nulo
-    estado = String(2), Nao Nulo
-    cidade = String(100), Nao Nulo
-    endereco = String(255), Nao Nulo
-    numero = String(10), Nao Nulo
-    codigo_rastreio = String(50), Nulo # Modificável apenas por Atendentes
-    status = String(30), Padrao='Pendente' # Transições: 'Pendente' -> 'Em Fabricação Manual' -> 'Enviado'
-    data_criacao = DataHora, Padrao=agora()
+... (restante dos arquivos de configuração como Dockerfile e requirements permanecem conforme anterior)
 4. Rotas e Lógica de Negócio (Controller)
 /app/routes.py
 ação: criar

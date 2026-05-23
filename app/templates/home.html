@@ -7,7 +7,7 @@
         <p class="col-md-12 fs-4">Explore nossos produtos artesanais exclusivos e feitos sob medida para você.</p>
         {% if not current_user.is_authenticated %}
             <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                <a href="{{ url_for('main.login') }}" class="btn btn-primary btn-lg px-4 me-md-2">Login</a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg px-4 me-md-2">Login</a>
                 <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#cadastroModal">Cadastrar-se</button>
             </div>
         {% endif %}
@@ -40,7 +40,7 @@
                 <h5 class="modal-title" id="cadastroModalLabel">Criar Nova Conta</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ url_for('main.cadastro') }}" method="POST">
+            <form action="{{ url_for('auth.cadastro') }}" method="POST">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="username" class="form-label">Usuário</label>

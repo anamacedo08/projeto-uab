@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-from datetime import datetime
+from datetime import datetime, timezone
 
 db = SQLAlchemy()
 
@@ -29,6 +29,6 @@ class Pedido(db.Model):
     numero = db.Column(db.String(10), nullable=False)
     codigo_rastreio = db.Column(db.String(50), nullable=True)
     status = db.Column(db.String(30), default='Pendente')
-    data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
+    data_criacao = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     cliente = db.relationship('User', backref=db.backref('pedidos', lazy=True))

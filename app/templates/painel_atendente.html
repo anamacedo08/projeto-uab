@@ -15,11 +15,11 @@
                 <p class="card-text"><strong>Status:</strong> <span class="badge bg-secondary">{{ pedido.status }}</span></p>
                 
                 {% if pedido.status == 'Pendente' %}
-                    <form action="{{ url_for('main.iniciar_fabricacao', pedido_id=pedido.id) }}" method="POST">
+                    <form action="{{ url_for('atendente.iniciar_fabricacao', pedido_id=pedido.id) }}" method="POST">
                         <button type="submit" class="btn btn-warning w-100">Iniciar Fabricação Manual</button>
                     </form>
                 {% elif pedido.status == 'Em Fabricação Manual' %}
-                    <form action="{{ url_for('main.enviar_pedido', pedido_id=pedido.id) }}" method="POST">
+                    <form action="{{ url_for('atendente.enviar_pedido', pedido_id=pedido.id) }}" method="POST">
                         <div class="input-group">
                             <input type="text" name="codigo_rastreio" class="form-control" placeholder="Código de Rastreio" required>
                             <button type="submit" class="btn btn-success">Despachar e Enviar</button>

@@ -9,26 +9,26 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('main.home') }}">Artesanato Personalizado</a>
+            <a class="navbar-brand" href="{{ url_for('public.home') }}">Artesanato Personalizado</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main.home') }}">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('public.home') }}">Início</a></li>
                     {% if current_user.is_authenticated %}
                         {% if current_user.role == 'admin' %}
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.admin_produtos') }}">Produtos</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.admin_atendentes') }}">Atendentes</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.admin_relatorios') }}">Relatórios</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.produtos') }}">Produtos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.atendentes') }}">Atendentes</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.relatorios') }}">Relatórios</a></li>
                         {% elif current_user.role == 'atendente' %}
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.atendente_painel') }}">Painel de Pedidos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('atendente.painel') }}">Painel de Pedidos</a></li>
                         {% elif current_user.role == 'cliente' %}
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('main.cliente_pedidos') }}">Meus Pedidos</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('cliente.pedidos') }}">Meus Pedidos</a></li>
                         {% endif %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.logout') }}">Sair ({{ current_user.username }})</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Sair ({{ current_user.username }})</a></li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{{ url_for('main.login') }}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Login</a></li>
                     {% endif %}
                 </ul>
             </div>
