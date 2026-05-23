@@ -1,57 +1,81 @@
 # Plano de Testes (TDD First) - Sistema de Encomendas
 
-Este documento descreve a estratégia de testes automatizados para o sistema, priorizando cenários críticos e seguindo o ciclo TDD (Red-Green-Refactor).
+Este documento detalha o planejamento de testes automatizados, seguindo a metodologia **TDD (Test Driven Development)**. O foco está na garantia da integridade das regras de negócio, segurança de acesso (RBAC - Role Based Access Control) e estabilidade do sistema.
 
 ## 1. Estratégia de Testes
 
-- **Framework:** `pytest`
-- **Abordagem:** Testes de Unidade e Integração.
-- **Isolamento:** Uso de banco de dados SQLite em memória para garantir rapidez e consistência.
-- **Mocks:** Utilização de `pytest-mock` para simular dependências externas se necessário.
+### 1.1. Framework e Ferramentas
+- **Base:** `pytest` para execução e organização dos testes.
+- **Integração Web:** `pytest-flask` para simular requisições HTTP e interagir com o contexto da aplicação.
+- **Banco de Dados:** SQLite em memória (`sqlite:///:memory:`) para garantir que cada teste comece em um estado limpo e seja executado rapidamente.
+- **Cobertura:** `pytest-cov` para monitorar a porcentagem de código testado.
+- **Dados Sintéticos:** `Faker` para geração de dados aleatórios e realistas (nomes, e-mails, senhas).
+
+### 1.2. Abordagem TDD
+O ciclo de desenvolvimento deve seguir rigorosamente:
+1.  **RED:** Criar o teste que falha para a nova funcionalidade ou correção.
+2.  **GREEN:** Implementar o código mínimo necessário para o teste passar.
+3.  **REFACTOR:** Melhorar a implementação garantindo que todos os testes continuem passando.
 
 ---
 
-## 2. Cenários de Teste por Funcionalidade
+## 2. Cenários de Teste
 
-### 2.1. Autenticação e Cadastro
+### 2.1. Autenticação e Controle de Sessão
 | ID | Cenário | Tipo | Prioridade | Descrição |
 |:---|:---|:---|:---|:---|
-| TC-01 | Cadastro de Novo Cliente | Integração | Alta | Validar se um usuário com role 'cliente' é criado corretamente no banco. |
-| TC-02 | Login com Credenciais Válidas | Integração | Crítica | Verificar se o usuário é autenticado e redirecionado para a rota correta conforme seu papel. |
-| TC-03 | Login com Senha Incorreta | Unidade | Alta | Garantir que o sistema rejeite credenciais inválidas e exiba mensagem de erro. |
+| TC-01 | Cadastro de Cliente | Unidade | Alta | Validar se um novo usuário com `role='cliente'` é criado com hash de senha. |
+| TC-02 | Login de Usuário | Integração | Crítica | Verificar redirecionamento correto pós-login para Admin, Atendente e Cliente. |
+| TC-03 | Logout | Integração | Média | Garantir que a sessão seja encerrada e o usuário redirecionado para o login. |
+| TC-04 | Acesso Não Autenticado | Segurança | Crítica | Tentar acessar `/clientes/pedidos` sem login e esperar redirecionamento (302) para `/login`. |
 
-### 2.2. Gestão de Pedidos (Cliente)
+### 2.2. Segurança e Autorização (RBAC)
+Cenários focados em impedir o acesso indevido entre diferentes perfis de usuário.
+
 | ID | Cenário | Tipo | Prioridade | Descrição |
 |:---|:---|:---|:---|:---|
-| TC-04 | Criação de Pedido | Integração | Crítica | Validar se um cliente autenticado pode registrar um pedido com detalhes e endereço. |
-| TC-05 | Acesso Negado a Outras Roles | Segurança | Alta | Garantir que atendentes/admins não acessem a rota de criação de pedido de cliente (403). |
+| TC-05 | Cliente -> Painel Atendente | Segurança | Crítica | Cliente autenticado tenta acessar `/atendente/painel`. **Esperado: 403 Forbidden**. |
+| TC-06 | Cliente -> Gestão Admin | Segurança | Crítica | Cliente autenticado tenta acessar `/admin/atendentes`. **Esperado: 403 Forbidden**. |
+| TC-07 | Cliente -> Relatórios Admin | Segurança | Crítica | Cliente autenticado tenta acessar `/admin/relatorios`. **Esperado: 403 Forbidden**. |
+| TC-08 | Atendente -> Gestão Admin | Segurança | Alta | Atendente tenta acessar rotas exclusivas do administrador. **Esperado: 403 Forbidden**. |
 
-### 2.3. Gestão Operacional (Atendente)
+### 2.3. Gestão de Pedidos (Fluxo Operacional)
 | ID | Cenário | Tipo | Prioridade | Descrição |
 |:---|:---|:---|:---|:---|
-| TC-06 | Iniciar Fabricação | Integração | Alta | Validar a transição de status do pedido de 'Pendente' para 'Em Fabricação Manual'. |
-| TC-07 | Despachar Pedido com Rastreio | Integração | Alta | Verificar se o status muda para 'Enviado' e o código de rastreio é persistido. |
+| TC-09 | Criação de Pedido | Integração | Crítica | Validar se o cliente pode criar um pedido e se ele aparece em sua lista. |
+| TC-10 | Transição de Status (Fabricação) | Integração | Alta | Atendente altera pedido de 'Pendente' para 'Em Fabricação Manual'. |
+| TC-11 | Finalização e Rastreio | Integração | Alta | Atendente insere código de rastreio e muda status para 'Enviado'. |
 
-### 2.4. Administração (Admin)
+### 2.4. Administração
 | ID | Cenário | Tipo | Prioridade | Descrição |
 |:---|:---|:---|:---|:---|
-| TC-08 | Registro de Atendente | Integração | Alta | Validar que apenas o Admin pode criar usuários com a role 'atendente'. |
-| TC-09 | Relatório Consolidado | Unidade | Média | Verificar se o cálculo de métricas (total, pendentes, etc.) está correto matematicamente. |
+| TC-12 | CRUD de Atendentes | Integração | Alta | Admin cria e remove usuários com papel de 'atendente'. |
+| TC-13 | Integridade do Relatório | Unidade | Média | Validar se a contagem de pedidos por status no relatório bate com o banco de dados. |
 
 ---
 
-## 3. Estrutura do Ambiente de Teste
+## 3. Ambiente e Execução
 
-Os testes devem residir no diretório `/tests`. Cada arquivo de teste deve seguir o padrão `test_*.py`.
+### 3.1. Configuração de Fixtures (`tests/conftest.py`)
+Para que o TDD seja efetivo, o ambiente deve ser automatizado:
+- `app()`: Retorna a instância da aplicação configurada para testes.
+- `client()`: Retorna o cliente de teste do Flask.
+- `db_session()`: Gerencia o ciclo de vida do banco de dados (setup/teardown) para cada teste.
+- `auth_client(role)`: Helper para retornar um cliente já autenticado com o papel especificado.
 
-### 3.1. Configuração do Fixture (`tests/conftest.py`)
-- Configurar o `app` em modo de teste (`TESTING=True`).
-- Inicializar `db.create_all()` em um banco SQLite temporário.
-- Limpar o banco após cada função de teste.
+### 3.2. Comandos de Execução
+```bash
+# Executar todos os testes
+pytest
+
+# Executar com relatório de cobertura
+pytest --cov=app tests/
+
+# Executar um cenário específico (ex: TC-05)
+pytest tests/test_security.py -k "test_cliente_access_atendente_panel"
+```
 
 ---
 
-## 4. Ciclo TDD Sugerido
-1. **RED:** Escrever o teste para o cenário crítico antes da implementação da rota/lógica.
-2. **GREEN:** Implementar o código mínimo necessário para passar no teste.
-3. **REFACTOR:** Melhorar a estrutura do código mantendo os testes passando.
+## 4. Manutenção do Plano
+Este plano deve ser atualizado sempre que uma nova especificação técnica (como a `03-especs.md`) for alterada ou novas funcionalidades forem introduzidas no roteiro de desenvolvimento.
