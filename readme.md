@@ -9,7 +9,7 @@ Este é um sistema web desenvolvido em Flask para gestão de encomendas de produ
 - **Painel do Atendente:** Gestão do fluxo de produção (Pendente -> Em Fabricação -> Enviado) e inserção de código de rastreio.
 - **Painel do Administrador:** Gestão de atendentes, gestão completa da vitrine (cadastro, edição e exclusão de produtos) e relatórios detalhados com dashboard e listagem de pedidos.
 - **Auto-Seeding:** O sistema realiza o pré-cadastro automático de 5 produtos iniciais na primeira execução para facilitar a demonstração.
-- **Interface Vibrante (ArtesaLab):** Design system moderno com paleta de cores inspirada em artesanato (`Indigo`, `Amber`, `Emerald`), logo personalizado e transições suaves.
+- **Identidade Visual (ArtesaLab):** Design system orgânico com paleta de cores inspirada na natureza e no outono (`Verde Floresta`, `Terracota`, `Sálvia`), logo verde personalizado e transições suaves.
 - **Responsividade & Acessibilidade:** Layout totalmente adaptável para mobile e tablets, com foco em acessibilidade (WCAG), labels claros e navegação por teclado.
 - **Feedback Visual:** Uso de spinners de carregamento, badges de status coloridas e estados vazios informativos.
 - **Gestão Otimizada:** Telas administrativas com layout limpo e espaçamento aprimorado para melhor usabilidade.

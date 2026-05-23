@@ -10,9 +10,9 @@
             <div class="card-header d-flex justify-content-between align-items-center bg-white border-bottom py-3">
                 <h5 class="mb-0 fw-bold text-dark">Pedido #{{ pedido.id }}</h5>
                 {% if pedido.status == 'Pendente' %}
-                    <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--secondary-color); color: #000;">{{ pedido.status }}</span>
+                    <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--secondary-color); color: #fff;">{{ pedido.status }}</span>
                 {% elif pedido.status == 'Em Fabricação Manual' %}
-                    <span class="badge py-2 px-3 shadow-sm" style="background-color: #0ea5e9; color: #fff;">{{ pedido.status }}</span>
+                    <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--sage-color); color: #fff;">{{ pedido.status }}</span>
                 {% elif pedido.status == 'Enviado' %}
                     <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--success-color); color: #fff;">{{ pedido.status }}</span>
                 {% else %}
@@ -38,9 +38,9 @@
                 
                 {% if pedido.status == 'Pendente' %}
                     <form action="{{ url_for('atendente.iniciar_fabricacao', pedido_id=pedido.id) }}" method="POST">
-                        <button type="submit" class="btn btn-warning w-100 fw-bold shadow-sm py-2">Iniciar Fabricação</button>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm py-2">Iniciar Fabricação</button>
                     </form>
-                {% elif pedido.status == 'Em Fabricação Manual' %}
+{% elif pedido.status == 'Em Fabricação Manual' %}
                     <form action="{{ url_for('atendente.enviar_pedido', pedido_id=pedido.id) }}" method="POST">
                         <div class="mb-3">
                             <label for="rastreio-{{ pedido.id }}" class="form-label small fw-bold">Código de Rastreio</label>
@@ -61,8 +61,13 @@
     </div>
     {% else %}
     <div class="col-12 text-center py-5">
-        <div class="alert alert-light border shadow-sm">
-            <p class="mb-0 text-muted">Não há pedidos pendentes ou em processamento no momento.</p>
+        <div class="card border-0 shadow-sm py-5">
+            <div class="card-body">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-muted opacity-50 mb-3">
+                    <circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4"/><path d="M12 8v8"/>
+                </svg>
+                <p class="mb-0 text-muted fs-5">Não há novos pedidos para processar no momento.</p>
+            </div>
         </div>
     </div>
     {% endfor %}

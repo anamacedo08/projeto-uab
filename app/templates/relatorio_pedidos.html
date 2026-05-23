@@ -5,7 +5,7 @@
 
 <div class="row mt-4 g-4">
     <div class="col-md-3">
-        <div class="card h-100 shadow border-0" style="background: linear-gradient(135deg, var(--primary-color) 0%, #4338ca 100%); color: white;">
+        <div class="card h-100 shadow border-0" style="background: linear-gradient(135deg, var(--primary-color) 0%, #1b5e20 100%); color: white;">
             <div class="card-body text-center d-flex flex-column justify-content-center p-4">
                 <h6 class="card-title text-uppercase fw-bold opacity-75 small mb-3">Total Geral</h6>
                 <p class="card-text display-4 fw-bold mb-0">{{ metricas.total }}</p>
@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card h-100 shadow border-0" style="background-color: var(--secondary-color); color: #000;">
+        <div class="card h-100 shadow border-0" style="background-color: var(--secondary-color); color: white;">
             <div class="card-body text-center d-flex flex-column justify-content-center p-4">
                 <h6 class="card-title text-uppercase fw-bold opacity-75 small mb-3">Aguardando</h6>
                 <p class="card-text display-4 fw-bold mb-0">{{ metricas.pendentes }}</p>
@@ -21,7 +21,7 @@
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card h-100 shadow border-0" style="background-color: #0ea5e9; color: white;">
+        <div class="card h-100 shadow border-0" style="background-color: var(--sage-color); color: white;">
             <div class="card-body text-center d-flex flex-column justify-content-center p-4">
                 <h6 class="card-title text-uppercase fw-bold opacity-75 small mb-3">Em Produção</h6>
                 <p class="card-text display-4 fw-bold mb-0">{{ metricas.em_fabricacao }}</p>
@@ -57,9 +57,9 @@
                 <td><small>{{ pedido.detalhes_produto }}</small></td>
                 <td>
                     {% if pedido.status == 'Pendente' %}
-                        <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--secondary-color); color: #000;">{{ pedido.status }}</span>
+                        <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--secondary-color); color: #fff;">{{ pedido.status }}</span>
                     {% elif pedido.status == 'Em Fabricação Manual' %}
-                        <span class="badge py-2 px-3 shadow-sm" style="background-color: #0ea5e9; color: #fff;">{{ pedido.status }}</span>
+                        <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--sage-color); color: #fff;">{{ pedido.status }}</span>
                     {% elif pedido.status == 'Enviado' %}
                         <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--success-color); color: #fff;">{{ pedido.status }}</span>
                     {% else %}

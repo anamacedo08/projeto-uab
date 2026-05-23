@@ -41,7 +41,7 @@ def test_pedido_status_badges(app, client):
     
     assert response.status_code == 200
     # Pendente -> var(--secondary-color)
-    assert b'style="background-color: var(--secondary-color); color: #000;">Pendente</span>' in response.data
+    assert b'style="background-color: var(--secondary-color); color: #fff;">Pendente</span>' in response.data
     # Enviado -> var(--success-color)
     assert b'style="background-color: var(--success-color); color: #fff;">Enviado</span>' in response.data
 

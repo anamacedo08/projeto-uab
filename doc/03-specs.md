@@ -250,55 +250,43 @@ Bloco content:
 ## 6. Requisitos de Frontend e UX
 
 ### 6.1. Identidade Visual e Design System
-O sistema deve adotar uma identidade visual vibrante e profissional, inspirada em trabalhos manuais e artesanais.
+O sistema adota uma identidade visual inspirada na natureza e no artesanato orgânico, utilizando tons de verde e cores de outono.
 
-- **Paleta de Cores:**
-  - **Primária (Artesanal):** `#6366f1` (Indigo - Moderno e confiável).
-  - **Secundária (Destaque):** `#f59e0b` (Amber - Caloroso e amigável).
-  - **Sucesso:** `#10b981` (Emerald).
-  - **Perigo:** `#ef4444` (Rose).
-  - **Fundo:** `#f8fafc` (Slate 50 - Neutro e limpo).
-- **Tipografia:** Fonte Sans-Serif moderna (Inter ou System Default).
-- **Logo:** Um ícone SVG minimalista representando uma ferramenta de artesão ou uma mão criando, posicionado ao lado do nome da marca.
-- **Sombras:** Uso de `shadow-sm` para cartões e `shadow` para modais e elementos em destaque.
-- **Bordas:** Arredondamento suave (`border-radius: 0.5rem`).
+- **Paleta de Cores (Natureza/Outono):**
+  - **Primária (Verde Floresta):** `#2e7d32` (Principal para botões primários e identidade).
+  - **Secundária (Terracota/Outono):** `#d84315` (Destaque e elementos complementares).
+  - **Destaque Suave (Sálvia):** `#81c784`.
+  - **Sucesso:** `#43a047`.
+  - **Perigo:** `#d32f2f`.
+  - **Fundo (Papel Reciclado Light):** `#f1f8e9`.
+  - **Texto:** `#1b5e20` (Verde muito escuro para contraste).
+- **Tipografia:** Fonte Sans-Serif moderna (Inter ou System Default), priorizando legibilidade.
+- **Logo:** Ícone SVG minimalista na cor **Verde Floresta** (`#2e7d32`), representando sustentabilidade e criação manual.
+- **Sombras e Bordas:** Uso de `shadow-sm` e `border-radius: 0.75rem` para um aspecto suave e orgânico.
 
 ### 6.2. Comportamento Visual e Estados
-- **Feedback de Interação:** 
-  - Botões e links devem ter transições suaves (`transition: all 0.2s`).
-  - Hover em cartões de produtos deve elevar levemente o elemento (`transform: translateY(-2px)`).
-- **Cores de Status:**
-  - `Pendente`: Amarelo (`#f59e0b`).
-  - `Em Fabricação Manual`: Azul (`#0ea5e9`).
-  - `Enviado`: Verde (`#10b981`).
-- **Feedback de Carregamento:** 
-  - Botões de formulário devem exibir um spinner e texto "Processando..." ao serem clicados.
-  - Skeletons devem ser usados em carregamentos de listas longas (opcional para esta fase, priorizar spinners).
-- **Estados Vazios:** 
-  - Ilustração simples ou ícone acompanhado de texto instrutivo (ex: "Ainda não há pedidos. Que tal começar um agora?").
+- **Responsividade:**
+  - **Mobile (< 576px):** Layout em coluna única, menus colapsáveis tipo "hamburger", botões em largura total.
+  - **Tablet (576px - 992px):** Grids flexíveis (2 colunas), ajustes de padding.
+  - **Desktop (> 992px):** Layout multi-coluna (3+), navegação horizontal completa.
+- **Acessibilidade (A11y):**
+  - Contraste mínimo de 4.5:1 seguindo WCAG AA.
+  - Navegação completa por teclado com foco visível (`outline` estilizado).
+  - Uso de atributos ARIA (`aria-label`, `aria-current`, `role="alert"`).
+  - Labels semânticos em todos os formulários.
+- **Estados de Tela e Feedback:**
+  - **Loading:** Spinners em botões de submissão e Skeletons para carregamento de listas.
+  - **Erro:** Mensagens claras em vermelho (`#d32f2f`) com feedback visual imediato nos campos (`.is-invalid`).
+  - **Estados Vazios:** Ilustrações em tons pastéis e mensagens de incentivo ("Nenhum pedido encontrado. Vamos criar o primeiro?").
+  - **Interação:** Efeito de elevação (`hover`) em cards e transições suaves de 0.2s.
 
 ### 6.3. Componentes de Interface
-- **Navbar:** Fixa no topo, com fundo gradiente ou cor sólida escura contrastante.
-- **Cards:** Estrutura consistente com imagem, título em destaque e descrição curta.
-- **Botões de Ação:** 
-  - Botões de "Alterar" e "Excluir" devem ter espaçamento claro (`gap-2` ou `margin`).
-  - Cores semânticas consistentes (Azul/Verde para ações positivas, Vermelho para negativas).
+- **Navbar:** Fixa, com fundo verde escuro ou translúcido com desfoque (backdrop-filter).
+- **Cards de Produto:** Bordas arredondadas, imagem em destaque e tipografia clara.
+- **Formulários:** Inputs com bordas suaves, foco em verde e validação em tempo real.
+- **Tabelas Responsivas:** Uso de `.table-responsive` e conversão para cards em telas mobile.
 
-### 6.4. Responsividade
-- **Breakpoints:**
-  - **Mobile (< 576px):** Layout em coluna única, botões em largura total (`w-100`).
-  - **Tablet (576px - 992px):** Grid de 2 colunas para cards.
-  - **Desktop (> 992px):** Layout completo com sidebar ou grid de 3+ colunas.
-- **Tabelas:** Devem ser envoltas em `.table-responsive` e, em telas muito pequenas, considerar a transição para visualização em cards.
-
-### 6.5. Acessibilidade (A11y)
-- **Navegação por Teclado:** Ordem lógica de tabulação (`tabindex`). Foco visível com contorno contrastante.
-- **Labels e ARIA:**
-  - Todos os inputs com `<label>` associado.
-  - `aria-label` em botões de ícone.
-  - `role="alert"` para mensagens de erro/sucesso (Flashes).
-- **Contraste:** Garantir relação de contraste mínima de 4.5:1 para textos normais.
-
-### 6.6. Validações e Formulários
-- **Validação Visual:** Classes `.is-invalid` aplicadas dinamicamente se houver erro no servidor ou validação client-side.
-- **Mensagens de Erro:** Posicionadas imediatamente abaixo do campo, em vermelho e com ícone de alerta.
+### 6.4. Padrões de Interação
+- **Confirmação:** Modais ou diálogos simples para ações destrutivas (Excluir).
+- **Notificações:** Flashes (Toasts) no topo da página para feedbacks de sucesso/erro.
+- **Consistência:** Uso rigoroso do Design System em todas as rotas (Admin, Atendente, Cliente).

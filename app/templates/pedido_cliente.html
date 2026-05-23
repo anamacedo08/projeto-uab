@@ -68,9 +68,9 @@
                 <td>{{ pedido.detalhes_produto }}</td>
                 <td>
                     {% if pedido.status == 'Pendente' %}
-                        <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--secondary-color); color: #000;">{{ pedido.status }}</span>
+                        <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--secondary-color); color: #fff;">{{ pedido.status }}</span>
                     {% elif pedido.status == 'Em Fabricação Manual' %}
-                        <span class="badge py-2 px-3 shadow-sm" style="background-color: #0ea5e9; color: #fff;">{{ pedido.status }}</span>
+                        <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--sage-color); color: #fff;">{{ pedido.status }}</span>
                     {% elif pedido.status == 'Enviado' %}
                         <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--success-color); color: #fff;">{{ pedido.status }}</span>
                     {% else %}
@@ -153,8 +153,13 @@
             </tr>
             {% else %}
             <tr>
-                <td colspan="6" class="text-center py-4 text-muted">
-                    Você ainda não possui pedidos registrados.
+                <td colspan="6" class="text-center py-5">
+                    <div class="mb-3">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-muted opacity-50">
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                        </svg>
+                    </div>
+                    <p class="text-muted fs-5 mb-0">Você ainda não possui pedidos registrados. Vamos criar o primeiro?</p>
                 </td>
             </tr>
             {% endfor %}
