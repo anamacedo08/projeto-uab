@@ -11,9 +11,35 @@
                 <label for="detalhes_produto" class="form-label">Detalhes do Produto Personalizado</label>
                 <textarea name="detalhes_produto" class="form-control" id="detalhes_produto" rows="3" required></textarea>
             </div>
-            <div class="mb-3">
-                <label for="dados_envio" class="form-label">Dados de Envio</label>
-                <textarea name="dados_envio" class="form-control" id="dados_envio" rows="2" required></textarea>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="telefone_contato" class="form-label">Telefone de Contato</label>
+                    <input type="text" name="telefone_contato" class="form-control" id="telefone_contato" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="cep" class="form-label">CEP</label>
+                    <input type="text" name="cep" class="form-control" id="cep" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9 mb-3">
+                    <label for="endereco" class="form-label">Endereço</label>
+                    <input type="text" name="endereco" class="form-control" id="endereco" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="numero" class="form-label">Número</label>
+                    <input type="text" name="numero" class="form-control" id="numero" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 mb-3">
+                    <label for="cidade" class="form-label">Cidade</label>
+                    <input type="text" name="cidade" class="form-control" id="cidade" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="estado" class="form-label">Estado</label>
+                    <input type="text" name="estado" class="form-control" id="estado" maxlength="2" required placeholder="EX: SP">
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Fazer Pedido</button>
         </form>

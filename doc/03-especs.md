@@ -103,11 +103,22 @@ classe User(db.Model, UserMixin):
     password_hash = String(128), Nao Nulo
     role = String(20), Nao Nulo # Domínio fechado: 'admin', 'atendente', 'cliente'
 
+classe Produto(db.Model):
+    id = Inteiro, Chave Primaria
+    nome = String(100), Nao Nulo
+    descricao = Texto, Nao Nulo
+    imagem_url = String(255), Nao Nulo # URL ou caminho da imagem do produto
+
 classe Pedido(db.Model):
     id = Inteiro, Chave Primaria
     cliente_id = Inteiro, Chave Estrangeira(User.id), Nao Nulo
     detalhes_produto = Texto, Nao Nulo
-    dados_envio = Texto, Nao Nulo
+    telefone_contato = String(20), Nao Nulo
+    cep = String(9), Nao Nulo
+    estado = String(2), Nao Nulo
+    cidade = String(100), Nao Nulo
+    endereco = String(255), Nao Nulo
+    numero = String(10), Nao Nulo
     codigo_rastreio = String(50), Nulo # Modificável apenas por Atendentes
     status = String(30), Padrao='Pendente' # Transições: 'Pendente' -> 'Em Fabricação Manual' -> 'Enviado'
     data_criacao = DataHora, Padrao=agora()
@@ -121,6 +132,10 @@ pseudocódigo:
 
 Python
 # SERVIÇO DE AUTENTICAÇÃO E CADASTRO BASE
+rota GET '/':
+    produtos = buscar_todos_os_produtos()
+    renderizar 'home.html' passando produtos
+
 rota GET/POST '/login':
     se requisicao == POST:
         extrair 'username' ou 'email' e 'password'
@@ -141,14 +156,14 @@ rota POST '/cadastro':
 
 rota GET '/logout':
     logout_user()
-    redirecionar '/login'
+    redirecionar '/'
 
 # SERVIÇO DE PEDIDOS (EXCLUSIVO CLIENTE)
 rota GET/POST '/clientes/pedidos':
     interceptar se current_user.role != 'cliente' -> abortar(403)
     se requisicao == POST:
-        extrair 'detalhes_produto' e 'dados_envio'
-        novo_pedido = Pedido(cliente_id=current_user.id, detalhes_produto=detalhes_produto, dados_envio=dados_envio)
+        extrair 'detalhes_produto', 'telefone_contato', 'cep', 'estado', 'cidade', 'endereco', 'numero'
+        novo_pedido = Pedido(cliente_id=current_user.id, detalhes_produto=detalhes_produto, telefone_contato=telefone_contato, cep=cep, estado=estado, cidade=cidade, endereco=endereco, numero=numero)
         db.session.add(novo_pedido)
         db.session.commit()
 
@@ -195,6 +210,24 @@ rota POST '/admin/atendentes/deletar/<user_id>':
     deletar_do_banco(usuario)
     db.session.commit()
     redirecionar '/admin/atendentes'
+
+rota GET/POST '/admin/produtos':
+    interceptar se current_user.role != 'admin' -> abortar(403)
+    se requisicao == POST:
+        extrair 'nome', 'descricao', 'imagem_url'
+        novo_produto = Produto(nome=nome, descricao=descricao, imagem_url=imagem_url)
+        db.session.add(novo_produto)
+        db.session.commit()
+    
+    lista_produtos = buscar_todos_os_produtos()
+    renderizar 'crud_produtos.html' passando lista_produtos
+
+rota POST '/admin/produtos/deletar/<produto_id>':
+    interceptar se current_user.role != 'admin' -> abortar(403)
+    produto = buscar_produto_por_id(produto_id)
+    deletar_do_banco(produto)
+    db.session.commit()
+    redirecionar '/admin/produtos'
 
 rota GET '/admin/relatorios':
     interceptar se current_user.role != 'admin' -> abortar(403)

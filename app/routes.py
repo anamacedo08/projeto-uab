@@ -1,9 +1,14 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from .models import db, User, Pedido
+from .models import db, User, Pedido, Produto
 
 main = Blueprint('main', __name__)
+
+@main.route('/')
+def home():
+    produtos = Produto.query.all()
+    return render_template('home.html', produtos=produtos)
 
 @main.route('/login', methods=['GET', 'POST'])
 def login():
@@ -47,7 +52,7 @@ def cadastro():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('main.login'))
+    return redirect(url_for('main.home'))
 
 # SERVIÇO DE PEDIDOS (EXCLUSIVO CLIENTE)
 @main.route('/clientes/pedidos', methods=['GET', 'POST'])
@@ -57,8 +62,23 @@ def cliente_pedidos():
         abort(403)
     if request.method == 'POST':
         detalhes = request.form.get('detalhes_produto')
-        envio = request.form.get('dados_envio')
-        novo_pedido = Pedido(cliente_id=current_user.id, detalhes_produto=detalhes, dados_envio=envio)
+        telefone = request.form.get('telefone_contato')
+        cep = request.form.get('cep')
+        estado = request.form.get('estado')
+        cidade = request.form.get('cidade')
+        endereco = request.form.get('endereco')
+        numero = request.form.get('numero')
+        
+        novo_pedido = Pedido(
+            cliente_id=current_user.id, 
+            detalhes_produto=detalhes,
+            telefone_contato=telefone,
+            cep=cep,
+            estado=estado,
+            cidade=cidade,
+            endereco=endereco,
+            numero=numero
+        )
         db.session.add(novo_pedido)
         db.session.commit()
         return redirect(url_for('main.cliente_pedidos'))
@@ -149,7 +169,35 @@ def admin_relatorios():
     }
     return render_template('relatorio_pedidos.html', metricas=metricas)
 
-@main.route('/')
-def index():
-    return redirect(url_for('main.login'))
+@main.route('/admin/produtos', methods=['GET', 'POST'])
+@login_required
+def admin_produtos():
+    if current_user.role != 'admin':
+        abort(403)
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        descricao = request.form.get('descricao')
+        imagem_url = request.form.get('imagem_url')
+        
+        novo_produto = Produto(
+            nome=nome,
+            descricao=descricao,
+            imagem_url=imagem_url
+        )
+        db.session.add(novo_produto)
+        db.session.commit()
+        return redirect(url_for('main.admin_produtos'))
+
+    produtos = Produto.query.all()
+    return render_template('crud_produtos.html', produtos=produtos)
+
+@main.route('/admin/produtos/deletar/<int:produto_id>', methods=['POST'])
+@login_required
+def deletar_produto(produto_id):
+    if current_user.role != 'admin':
+        abort(403)
+    produto = Produto.query.get_or_404(produto_id)
+    db.session.delete(produto)
+    db.session.commit()
+    return redirect(url_for('main.admin_produtos'))
 

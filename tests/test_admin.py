@@ -44,9 +44,18 @@ def test_relatorio_pedidos(app, client):
         db.session.add_all([admin, cliente])
         db.session.commit()
         
-        p1 = Pedido(cliente_id=cliente.id, detalhes_produto='P1', dados_envio='D1', status='Pendente')
-        p2 = Pedido(cliente_id=cliente.id, detalhes_produto='P2', dados_envio='D2', status='Em Fabricação Manual')
-        p3 = Pedido(cliente_id=cliente.id, detalhes_produto='P3', dados_envio='D3', status='Enviado')
+        p1 = Pedido(
+            cliente_id=cliente.id, detalhes_produto='P1', status='Pendente',
+            telefone_contato='111', cep='1', estado='SP', cidade='C1', endereco='E1', numero='1'
+        )
+        p2 = Pedido(
+            cliente_id=cliente.id, detalhes_produto='P2', status='Em Fabricação Manual',
+            telefone_contato='222', cep='2', estado='SP', cidade='C2', endereco='E2', numero='2'
+        )
+        p3 = Pedido(
+            cliente_id=cliente.id, detalhes_produto='P3', status='Enviado',
+            telefone_contato='333', cep='3', estado='SP', cidade='C3', endereco='E3', numero='3'
+        )
         db.session.add_all([p1, p2, p3])
         db.session.commit()
 

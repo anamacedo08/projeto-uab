@@ -1,6 +1,13 @@
 # Sistema de Encomenda de Produtos Artesanais Personalizados
 
-Este é um sistema web desenvolvido em Flask para gestão de encomendas de produtos artesanais.
+Este é um sistema web desenvolvido em Flask para gestão de encomendas de produtos artesanais. O sistema conta com uma vitrine de produtos, área para clientes realizarem pedidos personalizados e painéis administrativos para atendentes e administradores.
+
+## Funcionalidades
+
+- **Vitrine (Home):** Exibição de produtos artesanais cadastrados pelo Administrador.
+- **Área do Cliente:** Cadastro, login e realização de pedidos com detalhes personalizados, telefone e endereço detalhado.
+- **Painel do Atendente:** Gestão do fluxo de produção (Pendente -> Em Fabricação -> Enviado) e inserção de código de rastreio.
+- **Painel do Administrador:** Gestão de atendentes, gestão da vitrine de produtos e relatórios de pedidos.
 
 ## Requisitos
 
@@ -39,7 +46,7 @@ A aplicação estará disponível em `http://localhost:5000`.
 
 Para executar os testes automatizados:
 ```bash
-pytest
+PYTHONPATH=. pytest
 ```
 
 ## Docker

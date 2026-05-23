@@ -13,7 +13,12 @@ def test_criacao_pedido(app, client):
     
     response = client.post('/clientes/pedidos', data={
         'detalhes_produto': 'Vaso de Cerâmica',
-        'dados_envio': 'Rua A, 123'
+        'telefone_contato': '11999999999',
+        'cep': '01001-000',
+        'estado': 'SP',
+        'cidade': 'São Paulo',
+        'endereco': 'Praça da Sé',
+        'numero': 'S/N'
     }, follow_redirects=True)
     
     assert response.status_code == 200
@@ -33,7 +38,16 @@ def test_fluxo_pedido_atendente(app, client):
         db.session.add_all([cliente, atendente])
         db.session.commit()
         
-        pedido = Pedido(cliente_id=cliente.id, detalhes_produto='Bolsa Bordada', dados_envio='Rua B, 456')
+        pedido = Pedido(
+            cliente_id=cliente.id, 
+            detalhes_produto='Bolsa Bordada', 
+            telefone_contato='11888888888',
+            cep='01001-000',
+            estado='SP',
+            cidade='São Paulo',
+            endereco='Rua B',
+            numero='456'
+        )
         db.session.add(pedido)
         db.session.commit()
         pedido_id = pedido.id

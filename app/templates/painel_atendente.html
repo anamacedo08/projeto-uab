@@ -10,7 +10,8 @@
             <div class="card-body">
                 <h5 class="card-title">Pedido #{{ pedido.id }} - {{ pedido.cliente.username }}</h5>
                 <p class="card-text"><strong>Detalhes:</strong> {{ pedido.detalhes_produto }}</p>
-                <p class="card-text"><strong>Envio:</strong> {{ pedido.dados_envio }}</p>
+                <p class="card-text"><strong>Contato:</strong> {{ pedido.telefone_contato }}</p>
+                <p class="card-text"><strong>Endereço:</strong> {{ pedido.endereco }}, {{ pedido.numero }} - {{ pedido.cidade }}/{{ pedido.estado }} (CEP: {{ pedido.cep }})</p>
                 <p class="card-text"><strong>Status:</strong> <span class="badge bg-secondary">{{ pedido.status }}</span></p>
                 
                 {% if pedido.status == 'Pendente' %}
