@@ -27,6 +27,32 @@ class OrderService:
         return novo_pedido
 
     @staticmethod
+    def update_order(pedido_id, cliente_id, detalhes, telefone, cep, estado, cidade, endereco, numero):
+        pedido = Pedido.query.get(pedido_id)
+        if pedido and pedido.cliente_id == cliente_id and pedido.status == StatusPedido.PENDENTE:
+            pedido.detalhes_produto = detalhes
+            pedido.telefone_contato = telefone
+            pedido.cep = cep
+            pedido.estado = estado
+            pedido.cidade = cidade
+            pedido.endereco = endereco
+            pedido.numero = numero
+            db.session.commit()
+            cache.delete('order_metrics')
+            return pedido
+        return None
+
+    @staticmethod
+    def delete_order(pedido_id, cliente_id):
+        pedido = Pedido.query.get(pedido_id)
+        if pedido and pedido.cliente_id == cliente_id and pedido.status == StatusPedido.PENDENTE:
+            db.session.delete(pedido)
+            db.session.commit()
+            cache.delete('order_metrics')
+            return True
+        return False
+
+    @staticmethod
     def get_orders_by_client(cliente_id):
         return Pedido.query.filter_by(cliente_id=cliente_id).all()
 

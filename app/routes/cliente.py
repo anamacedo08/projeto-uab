@@ -25,3 +25,27 @@ def pedidos():
 
     pedidos = OrderService.get_orders_by_client(current_user.id)
     return render_template('pedido_cliente.html', pedidos=pedidos)
+
+@cliente_bp.route('/clientes/pedidos/editar/<int:pedido_id>', methods=['POST'])
+@login_required
+@role_required(UserRole.CLIENTE)
+def editar_pedido(pedido_id):
+    OrderService.update_order(
+        pedido_id=pedido_id,
+        cliente_id=current_user.id,
+        detalhes=request.form.get('detalhes_produto'),
+        telefone=request.form.get('telefone_contato'),
+        cep=request.form.get('cep'),
+        estado=request.form.get('estado'),
+        cidade=request.form.get('cidade'),
+        endereco=request.form.get('endereco'),
+        numero=request.form.get('numero')
+    )
+    return redirect(url_for('cliente.pedidos'))
+
+@cliente_bp.route('/clientes/pedidos/deletar/<int:pedido_id>', methods=['POST'])
+@login_required
+@role_required(UserRole.CLIENTE)
+def deletar_pedido(pedido_id):
+    OrderService.delete_order(pedido_id, current_user.id)
+    return redirect(url_for('cliente.pedidos'))

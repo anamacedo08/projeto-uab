@@ -5,9 +5,10 @@ Este é um sistema web desenvolvido em Flask para gestão de encomendas de produ
 ## Funcionalidades
 
 - **Vitrine (Home):** Exibição de produtos artesanais cadastrados pelo Administrador.
-- **Área do Cliente:** Cadastro, login e realização de pedidos com detalhes personalizados, telefone e endereço detalhado.
+- **Área do Cliente:** Cadastro, login, realização de pedidos personalizados e gestão de pedidos (edição e deleção permitidas enquanto o pedido estiver com status 'Pendente').
 - **Painel do Atendente:** Gestão do fluxo de produção (Pendente -> Em Fabricação -> Enviado) e inserção de código de rastreio.
-- **Painel do Administrador:** Gestão de atendentes, gestão da vitrine de produtos e relatórios de pedidos.
+- **Painel do Administrador:** Gestão de atendentes, gestão completa da vitrine (cadastro, edição e exclusão de produtos) e relatórios detalhados com dashboard e listagem de pedidos.
+- **Auto-Seeding:** O sistema realiza o pré-cadastro automático de 5 produtos iniciais na primeira execução para facilitar a demonstração.
 - **Interface Refinada:** Design responsivo, acessível e com feedback visual em tempo real (loading states, badges de status).
 
 ## Requisitos

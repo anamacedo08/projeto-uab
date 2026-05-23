@@ -53,11 +53,45 @@
                                 <td class="fw-bold text-primary">{{ produto.nome }}</td>
                                 <td><small class="text-muted">{{ produto.descricao }}</small></td>
                                 <td class="text-center">
-                                    <form action="{{ url_for('admin.deletar_produto', produto_id=produto.id) }}" method="POST" onsubmit="return confirm('Deseja realmente excluir este produto?')">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm">
-                                            <i class="bi bi-trash"></i> Excluir
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-sm btn-outline-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ produto.id }}">
+                                            Editar
                                         </button>
-                                    </form>
+                                        <form action="{{ url_for('admin.deletar_produto', produto_id=produto.id) }}" method="POST" onsubmit="return confirm('Deseja realmente excluir este produto?')">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm">
+                                                Excluir
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    <!-- Edit Modal -->
+                                    <div class="modal fade" id="editModal{{ produto.id }}" tabindex="-1" aria-labelledby="editModalLabel{{ produto.id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content text-start">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editModalLabel{{ produto.id }}">Editar Produto</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ url_for('admin.editar_produto', produto_id=produto.id) }}" method="POST">
+                                                        <div class="mb-3">
+                                                            <label for="nome{{ produto.id }}" class="form-label fw-bold">Nome</label>
+                                                            <input type="text" name="nome" class="form-control" id="nome{{ produto.id }}" value="{{ produto.nome }}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="descricao{{ produto.id }}" class="form-label fw-bold">Descrição</label>
+                                                            <textarea name="descricao" class="form-control" id="descricao{{ produto.id }}" rows="3" required>{{ produto.descricao }}</textarea>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="imagem_url{{ produto.id }}" class="form-label fw-bold">URL da Imagem</label>
+                                                            <input type="url" name="imagem_url" class="form-control" id="imagem_url{{ produto.id }}" value="{{ produto.imagem_url }}" required>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary w-100">Salvar Alterações</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             {% else %}

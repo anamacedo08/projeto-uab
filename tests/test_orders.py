@@ -71,3 +71,122 @@ def test_fluxo_pedido_atendente(app, client):
         pedido = Pedido.query.get(pedido_id)
         assert pedido.status == 'Enviado'
         assert pedido.codigo_rastreio == 'BR123456789'
+
+def test_editar_pedido(app, client):
+    with app.app_context():
+        user = User(username='cliente_edit', email='ce@test.com', 
+                    password_hash=generate_password_hash('password'), role='cliente')
+        db.session.add(user)
+        db.session.commit()
+        
+        pedido = Pedido(
+            cliente_id=user.id, 
+            detalhes_produto='Pedido Antigo', 
+            telefone_contato='11777777777',
+            cep='01001-000',
+            estado='SP',
+            cidade='São Paulo',
+            endereco='Rua C',
+            numero='789'
+        )
+        db.session.add(pedido)
+        db.session.commit()
+        pedido_id = pedido.id
+
+    client.post('/login', data={'username': 'cliente_edit', 'password': 'password'})
+    
+    response = client.post(f'/clientes/pedidos/editar/{pedido_id}', data={
+        'detalhes_produto': 'Pedido Atualizado',
+        'telefone_contato': '11666666666',
+        'cep': '02002-000',
+        'estado': 'RJ',
+        'cidade': 'Rio de Janeiro',
+        'endereco': 'Rua D',
+        'numero': '123'
+    }, follow_redirects=True)
+    
+    assert response.status_code == 200
+    assert b'Pedido Atualizado' in response.data
+    
+    with app.app_context():
+        pedido = Pedido.query.get(pedido_id)
+        assert pedido.detalhes_produto == 'Pedido Atualizado'
+        assert pedido.cidade == 'Rio de Janeiro'
+
+def test_deletar_pedido(app, client):
+    with app.app_context():
+        user = User(username='cliente_del', email='cdel@test.com', 
+                    password_hash=generate_password_hash('password'), role='cliente')
+        db.session.add(user)
+        db.session.commit()
+        
+        pedido = Pedido(
+            cliente_id=user.id, 
+            detalhes_produto='Pedido para Deletar', 
+            telefone_contato='11555555555',
+            cep='01001-000',
+            estado='SP',
+            cidade='São Paulo',
+            endereco='Rua E',
+            numero='000'
+        )
+        db.session.add(pedido)
+        db.session.commit()
+        pedido_id = pedido.id
+
+    client.post('/login', data={'username': 'cliente_del', 'password': 'password'})
+    
+    response = client.post(f'/clientes/pedidos/deletar/{pedido_id}', follow_redirects=True)
+    
+    assert response.status_code == 200
+    assert b'Pedido para Deletar' not in response.data
+    
+    with app.app_context():
+        pedido = Pedido.query.get(pedido_id)
+        assert pedido is None
+
+def test_bloqueio_edicao_pedido_em_fabricacao(app, client):
+    with app.app_context():
+        user = User(username='cliente_block', email='cb@test.com', 
+                    password_hash=generate_password_hash('password'), role='cliente')
+        db.session.add(user)
+        db.session.commit()
+        
+        pedido = Pedido(
+            cliente_id=user.id, 
+            detalhes_produto='Pedido Intocável', 
+            telefone_contato='11444444444',
+            cep='01001-000',
+            estado='SP',
+            cidade='São Paulo',
+            endereco='Rua F',
+            numero='111',
+            status='Em Fabricação Manual'
+        )
+        db.session.add(pedido)
+        db.session.commit()
+        pedido_id = pedido.id
+
+    client.post('/login', data={'username': 'cliente_block', 'password': 'password'})
+    
+    # Tenta editar
+    client.post(f'/clientes/pedidos/editar/{pedido_id}', data={
+        'detalhes_produto': 'Tentativa de Edição',
+        'telefone_contato': '11444444444',
+        'cep': '01001-000',
+        'estado': 'SP',
+        'cidade': 'São Paulo',
+        'endereco': 'Rua F',
+        'numero': '111'
+    })
+    
+    with app.app_context():
+        pedido = Pedido.query.get(pedido_id)
+        assert pedido.detalhes_produto == 'Pedido Intocável' # Não deve mudar
+    
+    # Tenta deletar
+    client.post(f'/clientes/pedidos/deletar/{pedido_id}')
+    
+    with app.app_context():
+        pedido = Pedido.query.get(pedido_id)
+        assert pedido is not None # Não deve deletar

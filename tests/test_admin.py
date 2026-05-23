@@ -65,3 +65,43 @@ def test_relatorio_pedidos(app, client):
     assert response.status_code == 200
     assert b'3' in response.data # Total
     assert b'1' in response.data # Each status should have 1
+    assert b'P1' in response.data
+    assert b'P2' in response.data
+    assert b'P3' in response.data
+    assert b'cliente_rel' in response.data
+
+def test_editar_produto(app, client):
+    with app.app_context():
+        admin = User(username='admin_prod', email='adminprod@test.com', 
+                     password_hash=generate_password_hash('password'), role='admin')
+        db.session.add(admin)
+        db.session.commit()
+        
+        # O seeding já cria 5 produtos, vamos pegar um deles ou criar um novo
+        from app.models import Produto
+        produto = Produto(nome="Produto Original", descricao="Desc Original", imagem_url="http://test.com/img.jpg")
+        db.session.add(produto)
+        db.session.commit()
+        produto_id = produto.id
+
+    client.post('/login', data={'username': 'admin_prod', 'password': 'password'})
+    
+    response = client.post(f'/admin/produtos/editar/{produto_id}', data={
+        'nome': 'Produto Editado',
+        'descricao': 'Desc Editada',
+        'imagem_url': 'http://test.com/img_edit.jpg'
+    }, follow_redirects=True)
+    
+    assert response.status_code == 200
+    assert b'Produto Editado' in response.data
+    
+    with app.app_context():
+        from app.models import Produto
+        produto = Produto.query.get(produto_id)
+        assert produto.nome == 'Produto Editado'
+
+def test_seeding_produtos(app):
+    with app.app_context():
+        from app.models import Produto
+        count = Produto.query.count()
+        assert count >= 5

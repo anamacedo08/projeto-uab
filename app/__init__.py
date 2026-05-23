@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from .models import db, User
+from .models import db, User, Produto
 from .utils.constants import UserRole
 
 login_manager = LoginManager()
@@ -65,6 +65,18 @@ def create_app():
                 role=UserRole.ADMIN
             )
             db.session.add(new_admin)
+            db.session.commit()
+
+        # Seeding de Produtos
+        if not Produto.query.first():
+            produtos_iniciais = [
+                Produto(nome="Vaso de Cerâmica", descricao="Vaso artesanal pintado à mão.", imagem_url="https://images.unsplash.com/photo-1578749553370-4bc20c91038e?auto=format&fit=crop&q=80&w=400"),
+                Produto(nome="Tapete de Crochê", descricao="Tapete macio feito com fios naturais.", imagem_url="https://images.unsplash.com/photo-1598501479155-90b565780562?auto=format&fit=crop&q=80&w=400"),
+                Produto(nome="Cesta de Palha", descricao="Cesta trançada ideal para decoração.", imagem_url="https://images.unsplash.com/photo-1590422443048-43d96924f0c7?auto=format&fit=crop&q=80&w=400"),
+                Produto(nome="Escultura de Madeira", descricao="Escultura esculpida em madeira de reflorestamento.", imagem_url="https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?auto=format&fit=crop&q=80&w=400"),
+                Produto(nome="Porta-Joias de Vidro", descricao="Porta-joias com detalhes em vitral.", imagem_url="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=400")
+            ]
+            db.session.bulk_save_objects(produtos_iniciais)
             db.session.commit()
 
     return app

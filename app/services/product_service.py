@@ -20,6 +20,18 @@ class ProductService:
         return novo_produto
 
     @staticmethod
+    def update_product(produto_id, nome, descricao, imagem_url):
+        produto = Produto.query.get(produto_id)
+        if produto:
+            produto.nome = nome
+            produto.descricao = descricao
+            produto.imagem_url = imagem_url
+            db.session.commit()
+            cache.delete('all_products')
+            return produto
+        return None
+
+    @staticmethod
     def delete_product(produto_id):
         produto = Produto.query.get(produto_id)
         if produto:

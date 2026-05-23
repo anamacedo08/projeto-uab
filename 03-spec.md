@@ -84,6 +84,11 @@ def create_app():
             novo_admin = Usuario(username=admin_user, email='admin@example.com', password=gerar_hash(admin_pass), role='admin')
             db.session.add(novo_admin)
             db.session.commit()
+        
+        # Seeding: Pré-cadastro de 5 produtos iniciais
+        se buscar_todos_os_produtos() estiver vazio:
+            para i de 1 ate 5:
+                criar_produto(nome=f"Produto {i}", descricao=f"Descrição {i}", imagem_url=f"/static/img/produto{i}.jpg")
     
     retornar app
 
@@ -170,6 +175,22 @@ rota GET/POST '/clientes/pedidos':
     pedidos_do_cliente = buscar_pedidos_onde(cliente_id == current_user.id)
     renderizar 'pedido_cliente.html' passando pedidos_do_cliente
 
+rota POST '/clientes/pedidos/editar/<pedido_id>':
+    interceptar se current_user.role != 'cliente' -> abortar(403)
+    pedido = buscar_pedido_por_id(pedido_id)
+    se pedido.cliente_id == current_user.id e pedido.status == 'Pendente':
+        atualizar dados do pedido com dados do formulário
+        db.session.commit()
+    redirecionar '/clientes/pedidos'
+
+rota POST '/clientes/pedidos/deletar/<pedido_id>':
+    interceptar se current_user.role != 'cliente' -> abortar(403)
+    pedido = buscar_pedido_por_id(pedido_id)
+    se pedido.cliente_id == current_user.id e pedido.status == 'Pendente':
+        deletar_do_banco(pedido)
+        db.session.commit()
+    redirecionar '/clientes/pedidos'
+
 # SERVIÇO DE GESTÃO DE PEDIDOS (EXCLUSIVO ATENDENTE)
 rota GET '/atendente/painel':
     interceptar se current_user.role != 'atendente' -> abortar(403)
@@ -222,6 +243,13 @@ rota GET/POST '/admin/produtos':
     lista_produtos = buscar_todos_os_produtos()
     renderizar 'crud_produtos.html' passando lista_produtos
 
+rota POST '/admin/produtos/editar/<produto_id>':
+    interceptar se current_user.role != 'admin' -> abortar(403)
+    produto = buscar_produto_por_id(produto_id)
+    atualizar produto com 'nome', 'descricao', 'imagem_url' do formulário
+    db.session.commit()
+    redirecionar '/admin/produtos'
+
 rota POST '/admin/produtos/deletar/<produto_id>':
     interceptar se current_user.role != 'admin' -> abortar(403)
     produto = buscar_produto_por_id(produto_id)
@@ -232,7 +260,8 @@ rota POST '/admin/produtos/deletar/<produto_id>':
 rota GET '/admin/relatorios':
     interceptar se current_user.role != 'admin' -> abortar(403)
     metricas = calcular_agrupamento_por_status_pedidos()
-    renderizar 'relatorio_pedidos.html' passando metricas
+    todos_pedidos = buscar_todos_os_pedidos()
+    renderizar 'relatorio_pedidos.html' passando metricas e todos_pedidos
 5. Interface de Usuário (Templates Engine)
 /app/templates/base.html
 ação: criar
@@ -279,7 +308,7 @@ Bloco content:
 /app/templates/relatorio_pedidos.html
 ação: criar
 
-descrição: Painel executivo para consolidação de estatísticas quantitativas dos pedidos gerados na aplicação.
+descrição: Painel executivo para consolidação de estatísticas quantitativas dos pedidos gerados na aplicação e listagem detalhada.
 
 pseudocódigo:
 
@@ -291,3 +320,7 @@ Bloco content:
         Card 2: Pedidos Aguardando -> {{ metricas.pendentes }}
         Card 3: Em Produção -> {{ metricas.em_fabricacao }}
         Card 4: Total Enviados -> {{ metricas.enviados }}
+
+    Exibir Tabela de Pedidos:
+        Para cada pedido em todos_pedidos:
+            ID, Descrição (detalhes_produto), Status, Usuário (cliente.username)

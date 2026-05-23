@@ -46,6 +46,16 @@ Cenários focados em impedir o acesso indevido entre diferentes perfis de usuár
 | TC-10 | Transição de Status (Fabricação) | Integração | Alta | Atendente altera pedido de 'Pendente' para 'Em Fabricação Manual'. |
 | TC-11 | Finalização e Rastreio | Integração | Alta | Atendente insere código de rastreio e muda status para 'Enviado'. |
 
+### 2.4. Gestão de Pedidos e Produtos (Novos Requisitos)
+| ID | Cenário | Tipo | Prioridade | Descrição |
+|:---|:---|:---|:---|:---|
+| TC-12 | Edição de Pedido Pendente | Integração | Alta | Cliente edita detalhes de um pedido com status 'Pendente'. |
+| TC-13 | Deleção de Pedido Pendente | Integração | Alta | Cliente remove um pedido com status 'Pendente'. |
+| TC-14 | Bloqueio de Edição/Deleção | Segurança | Alta | Tentar editar ou deletar pedido com status 'Em Fabricação Manual'. **Esperado: Erro ou bloqueio**. |
+| TC-15 | Edição de Produto (Admin) | Integração | Média | Administrador altera nome e descrição de um produto existente. |
+| TC-16 | Pré-cadastro de Produtos | Sistema | Média | Verificar se ao iniciar o sistema pela primeira vez, 5 produtos são criados. |
+| TC-17 | Lista Detalhada em Relatórios | Funcional | Média | Verificar se a tela de relatórios lista os pedidos com descrição, status e nome do usuário. |
+
 ### 2.5. Otimização e Desempenho
 | ID | Cenário | Tipo | Prioridade | Descrição |
 |:---|:---|:---|:---|:---|

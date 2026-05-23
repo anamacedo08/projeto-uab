@@ -36,7 +36,8 @@ def deletar_atendente(user_id):
 @role_required(UserRole.ADMIN)
 def relatorios():
     metricas = OrderService.get_metrics()
-    return render_template('relatorio_pedidos.html', metricas=metricas)
+    todos_pedidos = OrderService.get_all_orders()
+    return render_template('relatorio_pedidos.html', metricas=metricas, todos_pedidos=todos_pedidos)
 
 @admin_bp.route('/admin/produtos', methods=['GET', 'POST'])
 @login_required
@@ -52,6 +53,18 @@ def produtos():
 
     produtos = ProductService.get_all_products()
     return render_template('crud_produtos.html', produtos=produtos)
+
+@admin_bp.route('/admin/produtos/editar/<int:produto_id>', methods=['POST'])
+@login_required
+@role_required(UserRole.ADMIN)
+def editar_produto(produto_id):
+    ProductService.update_product(
+        produto_id=produto_id,
+        nome=request.form.get('nome'),
+        descricao=request.form.get('descricao'),
+        imagem_url=request.form.get('imagem_url')
+    )
+    return redirect(url_for('admin.produtos'))
 
 @admin_bp.route('/admin/produtos/deletar/<int:produto_id>', methods=['POST'])
 @login_required
