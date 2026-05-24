@@ -64,23 +64,27 @@ Cenários focados em impedir o acesso indevido entre diferentes perfis de usuár
 | TC-19 | Background Notification | Assíncrono | Alta | Verificar se a função de notificação é disparada sem bloquear a resposta HTTP. |
 | TC-20 | Cache de Relatórios | Performance | Média | Validar persistência do cache de métricas por 120 segundos. |
 
-### 2.6. Frontend, UX e Acessibilidade (Refinados)
+### 2.6. Frontend, UX e Acessibilidade (E2E & Componentes)
 Cenários focados na experiência do usuário, conformidade visual e acessibilidade.
 
 | ID | Cenário | Tipo | Prioridade | Descrição |
 |:---|:---|:---|:---|:---|
-| TC-21 | Responsividade Mobile | Visual/E2E | Alta | Validar layout em 360x640px. O menu deve colapsar e botões devem ocupar 100% da largura. |
-| TC-22 | Responsividade Tablet | Visual/E2E | Média | Validar layout em 768x1024px. O grid de produtos deve exibir 2 colunas. |
-| TC-23 | Contraste de Cores | A11y | Crítica | Validar se os textos em tons de verde e outono possuem contraste mínimo de 4.5:1 (WCAG AA). |
-| TC-24 | Navegação por Teclado | A11y | Alta | Percorrer todo o fluxo de pedido apenas usando `Tab` e `Enter`. Foco deve ser visível e lógico. |
-| TC-25 | Feedback de Loading | UX | Alta | Ao submeter um pedido, o botão deve exibir um spinner e ficar desabilitado (prevenir double-click). |
-| TC-26 | Mensagens de Erro Visuais | UX | Alta | Validar se campos obrigatórios não preenchidos exibem borda vermelha e mensagem de erro imediata. |
-| TC-27 | Renderização de Skeletons | Performance | Média | Verificar exibição de placeholders durante o carregamento da lista de produtos (se implementado). |
-| TC-28 | Estados Vazios | UX | Baixa | Acessar "Meus Pedidos" sem pedidos e validar a exibição da mensagem amigável e botão de ação. |
-| TC-29 | Integração de Estilos (Design System) | Visual | Crítica | Garantir que o logo verde (#2e7d32) e a paleta de outono sejam consistentes em todas as páginas. |
-| TC-30 | Fallback de Imagem | UX | Média | Verificar se produtos sem `imagem_url` válida exibem uma imagem padrão ou placeholder elegante. |
-| TC-31 | Teste de Regressão Visual | Visual | Alta | Comparar o layout atual com o baseline após alterações de cores para garantir que nada quebrou. |
-| TC-32 | Acessibilidade ARIA | A11y | Média | Verificar se leitores de tela identificam corretamente as seções principais (`main`, `nav`, `alert`). |
+| TC-21 | Responsividade Mobile (360px) | Visual/E2E | Alta | Validar se o menu colapsa, botões ocupam 100% da largura e paddings são ajustados. |
+| TC-22 | Responsividade Tablet (768px) | Visual/E2E | Média | Validar se o grid de produtos exibe exatamente 2 colunas. |
+| TC-23 | Navegação por Teclado (A11y) | A11y | Crítica | Percorrer todo o fluxo de pedido usando apenas `Tab`/`Enter`. O foco deve ser visível (outline laranja). |
+| TC-24 | Validação de Contraste (A11y) | A11y | Alta | Verificar se todos os textos (especialmente na navbar e botões) cumprem WCAG AA. |
+| TC-25 | Atributos ARIA | A11y | Média | Validar presença de `aria-label` em botões de ícone e `aria-current` na navbar. |
+| TC-26 | Feedback de Loading (Fix) | UX | Alta | Ao clicar em "Salvar" no modal, o botão deve mostrar spinner e desabilitar. Validar se a página recarrega após sucesso. |
+| TC-27 | Recuperação de UI (Timeout) | UX | Média | Simular atraso na rede e garantir que a UI não fique travada permanentemente se a navegação falhar. |
+| TC-28 | Mensagens de Erro Visual | UX | Alta | Submeter formulário inválido e validar se o campo ganha borda vermelha e foco. |
+| TC-29 | Estados Vazios | UX | Média | Validar a renderização do componente de "Nenhum item encontrado" em todas as listagens. |
+| TC-30 | Renderização Condicional (RBAC) | Funcional | Crítica | Garantir que o Cliente NÃO veja botões de Edição/Deleção nem links de Administração. |
+| TC-31 | Estabilidade de Modal | UX | Alta | Abrir, fechar via "X", fechar via Backdrop e fechar via ESC. O foco deve retornar ao botão disparador. |
+| TC-32 | Regressão Visual Navbar | Visual | Média | Validar se a Navbar mantém a cor `#1b5e20` e o efeito de blur ao rolar a página. |
+| TC-33 | Fluxo de Edição de Produto | E2E | Crítica | Abrir modal -> Alterar Nome -> Salvar -> Verificar se o modal fecha e o novo nome aparece na lista. |
+| TC-34 | Feedback de Flash Messages | UX | Alta | Validar se as mensagens de sucesso/erro aparecem no topo com botão de fechar funcional. |
+
+
 
 
 ---

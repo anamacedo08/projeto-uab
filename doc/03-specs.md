@@ -249,44 +249,81 @@ Bloco content:
 
 ## 6. Requisitos de Frontend e UX
 
-### 6.1. Identidade Visual e Design System
-O sistema adota uma identidade visual inspirada na natureza e no artesanato orgânico, utilizando tons de verde e cores de outono.
+### 6.1. Identidade Visual e Design System (Brand Guidelines)
+O sistema adota uma identidade visual inspirada na natureza e no artesanato orgânico, utilizando tons de verde e cores de outono para transmitir confiança, sustentabilidade e cuidado manual.
 
-- **Paleta de Cores (Natureza/Outono):**
-  - **Primária (Verde Floresta):** `#2e7d32` (Principal para botões primários e identidade).
-  - **Secundária (Terracota/Outono):** `#d84315` (Destaque e elementos complementares).
-  - **Destaque Suave (Sálvia):** `#81c784`.
+- **Paleta de Cores (Acessível WCAG AA):**
+  - **Primária (Verde Floresta):** `#2e7d32` (Botões de ação principal, ícones de marca).
+  - **Secundária (Terracota/Outono):** `#d84315` (Destaque, chamadas para ação complementares).
+  - **Cabeçalhos e Tabelas (Verde Musgo Escuro):** `#236b27` (Uso em `.card-header` e `thead`).
+  - **Fundo da Navbar (Deep Green):** `#1b5e20` (Contraste máximo para navegação).
+  - **Destaque Suave (Sálvia):** `#81c784` (Badges, ícone da logo, estados ativos).
   - **Sucesso:** `#43a047`.
   - **Perigo:** `#d32f2f`.
   - **Fundo (Papel Reciclado Light):** `#f1f8e9`.
-  - **Texto:** `#1b5e20` (Verde muito escuro para contraste).
-- **Tipografia:** Fonte Sans-Serif moderna (Inter ou System Default), priorizando legibilidade.
-- **Logo:** Ícone SVG minimalista na cor **Verde Floresta** (`#2e7d32`), representando sustentabilidade e criação manual.
-- **Sombras e Bordas:** Uso de `shadow-sm` e `border-radius: 0.75rem` para um aspecto suave e orgânico.
+  - **Texto Principal:** `#1b5e20` (Verde muito escuro para legibilidade).
+- **Tipografia:** 
+  - **Principal:** `Inter`, `system-ui`, `-apple-system`, `sans-serif`.
+  - **Hierarquia:** H1/H2 com peso `800`, H5 com peso `700`, Body com peso `400/500`.
+- **Efeitos e Bordas:**
+  - **Bordas:** `border-radius: 0.75rem` (12px) para botões e inputs; `1rem` (16px) para cards.
+  - **Sombras:** `shadow-sm` (sutil) por padrão; `shadow` no hover de cards para profundidade.
+  - **Transições:** `transition: all 0.2s ease` em todos os elementos interativos.
 
-### 6.2. Comportamento Visual e Estados
-- **Responsividade:**
-  - **Mobile (< 576px):** Layout em coluna única, menus colapsáveis tipo "hamburger", botões em largura total.
-  - **Tablet (576px - 992px):** Grids flexíveis (2 colunas), ajustes de padding.
-  - **Desktop (> 992px):** Layout multi-coluna (3+), navegação horizontal completa.
-- **Acessibilidade (A11y):**
-  - Contraste mínimo de 4.5:1 seguindo WCAG AA.
-  - Navegação completa por teclado com foco visível (`outline` estilizado).
-  - Uso de atributos ARIA (`aria-label`, `aria-current`, `role="alert"`).
-  - Labels semânticos em todos os formulários.
-- **Estados de Tela e Feedback:**
-  - **Loading:** Spinners em botões de submissão e Skeletons para carregamento de listas.
-  - **Erro:** Mensagens claras em vermelho (`#d32f2f`) com feedback visual imediato nos campos (`.is-invalid`).
-  - **Estados Vazios:** Ilustrações em tons pastéis e mensagens de incentivo ("Nenhum pedido encontrado. Vamos criar o primeiro?").
-  - **Interação:** Efeito de elevação (`hover`) em cards e transições suaves de 0.2s.
+### 6.2. Comportamento Visual e Responsividade
+O sistema é **Mobile-First**, garantindo que todas as funcionalidades sejam acessíveis em dispositivos pequenos antes da expansão para desktop.
 
-### 6.3. Componentes de Interface
-- **Navbar:** Fixa, com fundo verde escuro ou translúcido com desfoque (backdrop-filter).
-- **Cards de Produto:** Bordas arredondadas, imagem em destaque e tipografia clara.
-- **Formulários:** Inputs com bordas suaves, foco em verde e validação em tempo real.
-- **Tabelas Responsivas:** Uso de `.table-responsive` e conversão para cards em telas mobile.
+- **Breakpoints (Bootstrap 5):**
+  - **Mobile (< 576px):** Layout em coluna única. Botões ocupam 100% da largura (`w-100`). Navbar colapsada com ícone hambúrguer. Padding lateral reduzido para 1rem.
+  - **Tablet (576px - 992px):** Grids de produtos e estatísticas em 2 colunas. Menus ainda colapsáveis se necessário.
+  - **Desktop (> 992px):** Grid de produtos em 3 ou 4 colunas. Navbar expandida com links visíveis.
+- **Grids e Espaçamentos:**
+  - Uso estrito de utilitários de espaçamento do Bootstrap (`m-*`, `p-*`, `g-*`).
+  - Margem inferior padrão entre seções de `2rem` (`mb-4`).
 
-### 6.4. Padrões de Interação
-- **Confirmação:** Modais ou diálogos simples para ações destrutivas (Excluir).
-- **Notificações:** Flashes (Toasts) no topo da página para feedbacks de sucesso/erro.
-- **Consistência:** Uso rigoroso do Design System em todas as rotas (Admin, Atendente, Cliente).
+### 6.3. Acessibilidade (A11y)
+Conformidade básica com WCAG 2.1 nível AA.
+
+- **Navegação por Teclado:**
+  - Ordem de foco lógica acompanhando a renderização visual.
+  - Indicador de foco customizado: `outline: 3px solid var(--secondary-color); outline-offset: 2px;`.
+  - Link de pulo ("Skip to main content") para leitores de tela.
+- **Semântica e ARIA:**
+  - Atributos `aria-label` em botões de ícone (ex: fechar modal, deletar).
+  - `aria-current="page"` em links ativos da navbar.
+  - `role="alert"` em mensagens de flash.
+  - `aria-live="polite"` em contadores dinâmicos e feedbacks de loading.
+  - `id` e `for` estritamente vinculados em todos os campos de formulário.
+- **Contraste:** Garantia de contraste mínimo de 4.5:1 para textos pequenos e 3:1 para textos grandes/elementos de interface.
+
+### 6.4. Componentes de Interface e Estados de Tela
+- **Navbar:** Fixa ao topo, transparente com blur (`backdrop-filter: blur(10px)`). Logo SVG minimalista à esquerda.
+- **Cards de Produto:** 
+  - Exibição de imagem com `object-fit: cover`.
+  - Título e descrição truncados se excederem o espaço.
+  - Efeito de elevação vertical (`translateY(-6px)`) no hover.
+- **Estados de Tela:**
+  - **Loading:** Botões de submissão exibem spinner e texto "Processando..." após validação. Bloqueio de submissão múltipla.
+  - **Skeleton Screens:** Usados em carregamentos assíncronos de listas (quando implementado Fetch).
+  - **Estados Vazios (Empty States):** Centralizados, com ícone SVG discreto, mensagem clara ("Nenhum item encontrado") e botão de ação se aplicável.
+  - **Erro:** Campos com `.is-invalid` exibem borda vermelha e mensagem de feedback via `.invalid-feedback`.
+
+### 6.5. Comportamento de Formulários e Validações
+- **Validação Nativa:** Uso de `required`, `type="email"`, `type="url"`, `minlength`, etc.
+- **Feedback Visual:** Validação em tempo de submissão. O botão de submit só desabilita se o formulário for nativamente válido.
+- **Modais:**
+  - Foco é capturado dentro do modal ao abrir (`focus trap`).
+  - Modais de edição carregam dados dinamicamente (via Jinja no lado do servidor ou Fetch).
+  - **Correção de UI:** O estado do botão de submit deve ser restaurado ou a página deve recarregar imediatamente para evitar travamentos da interface.
+
+### 6.6. Integração Frontend/Backend
+- **Sincronização:** A interface reflete o estado do servidor via recarregamento de página ou atualizações parciais (AJAX).
+- **Tratamento de Erros:** Erros 4xx e 5xx devem ser reportados ao usuário via mensagens de Flash estilizadas.
+- **Feedback de Longa Duração:** Requisições que excedem 2 segundos devem exibir um indicador de progresso global.
+
+---
+
+## 7. Fluxos de Navegação Principais
+1. **Cliente:** Vitrine -> Cadastro/Login -> Formulário de Pedido -> Acompanhamento.
+2. **Atendente:** Login -> Painel Operacional -> Atualização de Status -> Notificação Automática.
+3. **Administrador:** Login -> Gestão de Atendentes/Produtos -> Relatórios de Desempenho.

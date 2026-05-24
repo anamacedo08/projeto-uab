@@ -1,169 +1,178 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Meus Pedidos</h2>
+<h2 class="fw-bold mb-4">Meus Pedidos</h2>
 
-<div class="card mb-4 shadow-sm">
-    <div class="card-header bg-primary text-white">Novo Pedido</div>
-    <div class="card-body">
-        <form method="POST">
+<div class="card mb-5 shadow-sm border-0">
+    <div class="card-header py-3 fw-bold">Solicitar Novo Pedido Personalizado</div>
+    <div class="card-body p-4">
+        <form method="POST" id="createOrderForm">
             <div class="mb-3">
-                <label for="detalhes_produto" class="form-label fw-bold">Detalhes do Produto Personalizado</label>
-                <textarea name="detalhes_produto" class="form-control" id="detalhes_produto" rows="3" required placeholder="Descreva como você quer seu produto..."></textarea>
+                <label for="detalhes_produto" class="form-label fw-bold">Detalhes do Produto</label>
+                <textarea name="detalhes_produto" class="form-control" id="detalhes_produto" rows="3" required placeholder="Descreva as características, cores e personalizações desejadas..."></textarea>
             </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
+            <div class="row g-3">
+                <div class="col-md-6">
                     <label for="telefone_contato" class="form-label fw-bold">Telefone de Contato</label>
                     <input type="tel" name="telefone_contato" class="form-control" id="telefone_contato" required placeholder="(00) 00000-0000">
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <label for="cep" class="form-label fw-bold">CEP</label>
                     <input type="text" name="cep" class="form-control" id="cep" required placeholder="00000-000" pattern="[0-9]{5}-?[0-9]{3}" title="Informe um CEP válido (Ex: 12345-678)">
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-9 mb-3">
-                    <label for="endereco" class="form-label fw-bold">Endereço</label>
-                    <input type="text" name="endereco" class="form-control" id="endereco" required placeholder="Rua, Avenida, etc.">
+                <div class="col-md-9">
+                    <label for="endereco" class="form-label fw-bold">Endereço Completo</label>
+                    <input type="text" name="endereco" class="form-control" id="endereco" required placeholder="Rua, Avenida, Logradouro...">
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3">
                     <label for="numero" class="form-label fw-bold">Número</label>
                     <input type="text" name="numero" class="form-control" id="numero" required>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8 mb-3">
+                <div class="col-md-8">
                     <label for="cidade" class="form-label fw-bold">Cidade</label>
                     <input type="text" name="cidade" class="form-control" id="cidade" required>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-md-4">
                     <label for="estado" class="form-label fw-bold">Estado (UF)</label>
                     <input type="text" name="estado" class="form-control" id="estado" maxlength="2" required placeholder="EX: SP" style="text-transform: uppercase;">
                 </div>
             </div>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button type="submit" class="btn btn-primary px-5">Fazer Pedido</button>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <button type="submit" class="btn btn-primary px-5 fw-bold shadow-sm">Confirmar Pedido</button>
             </div>
         </form>
     </div>
 </div>
 
-<h3 class="mb-3 mt-5">Histórico de Pedidos</h3>
-<div class="table-responsive shadow-sm rounded">
-    <table class="table table-hover align-middle mb-0">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Detalhes</th>
-                <th>Status</th>
-                <th>Rastreio</th>
-                <th>Data</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for pedido in pedidos %}
-            <tr>
-                <td><strong>#{{ pedido.id }}</strong></td>
-                <td>{{ pedido.detalhes_produto }}</td>
-                <td>
-                    {% if pedido.status == 'Pendente' %}
-                        <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--secondary-color); color: #fff;">{{ pedido.status }}</span>
-                    {% elif pedido.status == 'Em Fabricação Manual' %}
-                        <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--sage-color); color: #fff;">{{ pedido.status }}</span>
-                    {% elif pedido.status == 'Enviado' %}
-                        <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--success-color); color: #fff;">{{ pedido.status }}</span>
-                    {% else %}
-                        <span class="badge bg-secondary py-2 px-3">{{ pedido.status }}</span>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if pedido.codigo_rastreio %}
-                        <code class="text-primary fw-bold">{{ pedido.codigo_rastreio }}</code>
-                    {% else %}
-                        <span class="text-muted small"><em>Em processamento</em></span>
-                    {% endif %}
-                </td>
-                <td><small class="text-muted">{{ pedido.data_criacao.strftime('%d/%m/%Y %H:%M') }}</small></td>
-                <td>
-                    {% if pedido.status == 'Pendente' %}
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-sm btn-outline-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ pedido.id }}">
-                            Editar
-                        </button>
-                        <form action="{{ url_for('cliente.deletar_pedido', pedido_id=pedido.id) }}" method="POST" class="d-inline">
-                            <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm" onclick="return confirm('Tem certeza que deseja deletar este pedido?')">Deletar</button>
-                        </form>
-                    </div>
+<h3 class="h4 fw-bold mb-4 mt-5">Histórico de Pedidos</h3>
+<div class="card shadow-sm border-0">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" class="ps-4">ID</th>
+                    <th scope="col">Detalhes</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Rastreio</th>
+                    <th scope="col">Data</th>
+                    <th scope="col" class="text-center pe-4">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pedido in pedidos %}
+                <tr>
+                    <td class="ps-4"><strong>#{{ pedido.id }}</strong></td>
+                    <td>
+                        <div class="text-truncate" style="max-width: 200px;" title="{{ pedido.detalhes_produto }}">
+                            {{ pedido.detalhes_produto }}
+                        </div>
+                    </td>
+                    <td>
+                        {% if pedido.status == 'Pendente' %}
+                            <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--secondary-color); color: #fff;">{{ pedido.status }}</span>
+                        {% elif pedido.status == 'Em Fabricação Manual' %}
+                            <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--sage-color); color: #fff;">{{ pedido.status }}</span>
+                        {% elif pedido.status == 'Enviado' %}
+                            <span class="badge py-2 px-3 shadow-sm" style="background-color: var(--success-color); color: #fff;">{{ pedido.status }}</span>
+                        {% else %}
+                            <span class="badge bg-secondary py-2 px-3">{{ pedido.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if pedido.codigo_rastreio %}
+                            <code class="text-primary fw-bold">{{ pedido.codigo_rastreio }}</code>
+                        {% else %}
+                            <span class="text-muted small"><em>Aguardando envio</em></span>
+                        {% endif %}
+                    </td>
+                    <td><small class="text-muted">{{ pedido.data_criacao.strftime('%d/%m/%Y %H:%M') }}</small></td>
+                    <td class="text-center pe-4">
+                        {% if pedido.status == 'Pendente' %}
+                        <div class="d-flex justify-content-center gap-2">
+                            <button type="button" class="btn btn-sm btn-outline-primary shadow-sm px-3" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editModal{{ pedido.id }}"
+                                    aria-label="Editar pedido #{{ pedido.id }}">
+                                Editar
+                            </button>
+                            <form action="{{ url_for('cliente.deletar_pedido', pedido_id=pedido.id) }}" method="POST" class="d-inline"
+                                  onsubmit="return confirm('Tem certeza que deseja deletar este pedido?')">
+                                <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm px-3"
+                                        aria-label="Deletar pedido #{{ pedido.id }}">
+                                    Deletar
+                                </button>
+                            </form>
+                        </div>
 
-                    <!-- Edit Modal -->
-                    <div class="modal fade" id="editModal{{ pedido.id }}" tabindex="-1" aria-labelledby="editModalLabel{{ pedido.id }}" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editModalLabel{{ pedido.id }}">Editar Pedido #{{ pedido.id }}</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="{{ url_for('cliente.editar_pedido', pedido_id=pedido.id) }}" method="POST">
-                                        <div class="mb-3">
-                                            <label for="detalhes_produto{{ pedido.id }}" class="form-label fw-bold">Detalhes do Produto</label>
-                                            <textarea name="detalhes_produto" class="form-control" id="detalhes_produto{{ pedido.id }}" rows="3" required>{{ pedido.detalhes_produto }}</textarea>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="telefone_contato{{ pedido.id }}" class="form-label fw-bold">Telefone</label>
-                                                <input type="tel" name="telefone_contato" class="form-control" id="telefone_contato{{ pedido.id }}" value="{{ pedido.telefone_contato }}" required>
+                        <!-- Edit Modal -->
+                        <div class="modal fade" id="editModal{{ pedido.id }}" tabindex="-1" aria-labelledby="editModalLabel{{ pedido.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content border-0 shadow">
+                                    <div class="modal-header border-bottom-0">
+                                        <h5 class="modal-title fw-bold" id="editModalLabel{{ pedido.id }}">Editar Pedido #{{ pedido.id }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                    </div>
+                                    <div class="modal-body py-4">
+                                        <form action="{{ url_for('cliente.editar_pedido', pedido_id=pedido.id) }}" method="POST">
+                                            <div class="mb-3">
+                                                <label for="detalhes_produto{{ pedido.id }}" class="form-label fw-bold">Detalhes do Produto</label>
+                                                <textarea name="detalhes_produto" class="form-control" id="detalhes_produto{{ pedido.id }}" rows="3" required>{{ pedido.detalhes_produto }}</textarea>
                                             </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="cep{{ pedido.id }}" class="form-label fw-bold">CEP</label>
-                                                <input type="text" name="cep" class="form-control" id="cep{{ pedido.id }}" value="{{ pedido.cep }}" required pattern="[0-9]{5}-?[0-9]{3}">
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <label for="telefone_contato{{ pedido.id }}" class="form-label fw-bold">Telefone</label>
+                                                    <input type="tel" name="telefone_contato" class="form-control" id="telefone_contato{{ pedido.id }}" value="{{ pedido.telefone_contato }}" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="cep{{ pedido.id }}" class="form-label fw-bold">CEP</label>
+                                                    <input type="text" name="cep" class="form-control" id="cep{{ pedido.id }}" value="{{ pedido.cep }}" required pattern="[0-9]{5}-?[0-9]{3}">
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <label for="endereco{{ pedido.id }}" class="form-label fw-bold">Endereço</label>
+                                                    <input type="text" name="endereco" class="form-control" id="endereco{{ pedido.id }}" value="{{ pedido.endereco }}" required>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="numero{{ pedido.id }}" class="form-label fw-bold">Número</label>
+                                                    <input type="text" name="numero" class="form-control" id="numero{{ pedido.id }}" value="{{ pedido.numero }}" required>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <label for="cidade{{ pedido.id }}" class="form-label fw-bold">Cidade</label>
+                                                    <input type="text" name="cidade" class="form-control" id="cidade{{ pedido.id }}" value="{{ pedido.cidade }}" required>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="estado{{ pedido.id }}" class="form-label fw-bold">Estado (UF)</label>
+                                                    <input type="text" name="estado" class="form-control" id="estado{{ pedido.id }}" maxlength="2" value="{{ pedido.estado }}" required style="text-transform: uppercase;">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-9 mb-3">
-                                                <label for="endereco{{ pedido.id }}" class="form-label fw-bold">Endereço</label>
-                                                <input type="text" name="endereco" class="form-control" id="endereco{{ pedido.id }}" value="{{ pedido.endereco }}" required>
+                                            <div class="d-grid gap-2 mt-4">
+                                                <button type="submit" class="btn btn-primary fw-bold">Salvar Alterações</button>
+                                                <button type="button" class="btn btn-link text-muted" data-bs-dismiss="modal">Cancelar</button>
                                             </div>
-                                            <div class="col-md-3 mb-3">
-                                                <label for="numero{{ pedido.id }}" class="form-label fw-bold">Número</label>
-                                                <input type="text" name="numero" class="form-control" id="numero{{ pedido.id }}" value="{{ pedido.numero }}" required>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-8 mb-3">
-                                                <label for="cidade{{ pedido.id }}" class="form-label fw-bold">Cidade</label>
-                                                <input type="text" name="cidade" class="form-control" id="cidade{{ pedido.id }}" value="{{ pedido.cidade }}" required>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label for="estado{{ pedido.id }}" class="form-label fw-bold">Estado (UF)</label>
-                                                <input type="text" name="estado" class="form-control" id="estado{{ pedido.id }}" maxlength="2" value="{{ pedido.estado }}" required style="text-transform: uppercase;">
-                                            </div>
-                                        </div>
-                                        <div class="text-end">
-                                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    {% endif %}
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="6" class="text-center py-5">
-                    <div class="mb-3">
-                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-muted opacity-50">
-                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
-                        </svg>
-                    </div>
-                    <p class="text-muted fs-5 mb-0">Você ainda não possui pedidos registrados. Vamos criar o primeiro?</p>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                        {% else %}
+                        <span class="text-muted small"><em>Ações desabilitadas</em></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center py-5">
+                        <div class="py-4">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-muted opacity-25 mb-3" aria-hidden="true">
+                                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                            </svg>
+                            <h6 class="text-muted fw-bold">Você ainda não possui pedidos</h6>
+                            <p class="text-muted small">Crie seu primeiro pedido personalizado acima.</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

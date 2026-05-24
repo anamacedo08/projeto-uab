@@ -8,6 +8,7 @@
     <style>
         :root {
             --primary-color: #2e7d32; /* Forest Green */
+            --header-green: #236b27; /* Dark green but not as dark as nav */
             --secondary-color: #d84315; /* Autumn Orange/Rust */
             --sage-color: #81c784;
             --success-color: #43a047;
@@ -41,6 +42,38 @@
 
         .logo-icon {
             fill: #81c784; /* Sage for contrast on dark green navbar */
+        }
+
+        .hero-section {
+            background-color: var(--header-green) !important;
+            color: white !important;
+        }
+
+        .hero-section .text-primary {
+            color: #81c784 !important;
+        }
+
+        .hero-section .text-muted {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        .card-header {
+            background-color: var(--header-green) !important;
+            color: white !important;
+        }
+
+        .card-header .text-primary, .card-header .text-dark {
+            color: white !important;
+        }
+
+        .table thead {
+            background-color: var(--header-green) !important;
+            color: white !important;
+        }
+
+        .table thead th {
+            color: white !important;
+            border-bottom: none;
         }
 
         .btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); }
@@ -135,6 +168,7 @@
                            href="{{ url_for('public.home') }}"
                            {% if request.endpoint == 'public.home' %}aria-current="page"{% endif %}>Início</a>
                     </li>
+
                     {% if current_user.is_authenticated %}
                         {% if current_user.role == 'admin' %}
                             <li class="nav-item">
@@ -197,14 +231,33 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Feedback de carregamento nos botões de formulário
+        // Feedback de carregamento robusto com fallback de segurança
         document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function() {
-                const btn = this.querySelector('button[type="submit"]');
-                if (btn) {
-                    btn.disabled = true;
-                    const originalText = btn.innerHTML;
-                    btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processando...`;
+            if (form.dataset.noLoading) return;
+
+            form.addEventListener('submit', function(event) {
+                // Só desabilita se o formulário for válido (validação nativa)
+                if (this.checkValidity()) {
+                    const btn = this.querySelector('button[type="submit"]');
+                    if (btn) {
+                        // Prevenir cliques múltiplos
+                        if (btn.disabled) {
+                            event.preventDefault();
+                            return;
+                        }
+                        
+                        const originalContent = btn.innerHTML;
+                        btn.disabled = true;
+                        btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processando...`;
+
+                        // Fallback: Re-habilitar após 10 segundos caso a navegação falhe ou demore
+                        setTimeout(() => {
+                            if (btn.disabled) {
+                                btn.disabled = false;
+                                btn.innerHTML = originalContent;
+                            }
+                        }, 10000);
+                    }
                 }
             });
         });

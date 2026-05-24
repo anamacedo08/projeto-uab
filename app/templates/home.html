@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="p-5 mb-5 text-white rounded-4 shadow" style="background: linear-gradient(135deg, var(--primary-color) 0%, #1b5e20 100%);">
+<div class="hero-section p-5 mb-5 rounded-4 shadow-sm border">
     <div class="container-fluid py-5 text-center">
-        <h1 class="display-4 fw-bolder mb-3">Artesanato que Conta Histórias</h1>
-        <p class="col-md-10 mx-auto fs-5 opacity-90 mb-4">Explore nossa curadoria de produtos exclusivos, feitos à mão com paixão e precisão para transformar sua rotina.</p>
+        <h1 class="display-4 fw-bolder mb-3 text-primary">Artesanato que Conta Histórias</h1>
+        <p class="col-md-10 mx-auto fs-5 text-muted mb-4">Explore nossa curadoria de produtos exclusivos, feitos à mão com paixão e precisão para transformar sua rotina.</p>
         {% if not current_user.is_authenticated %}
             <div class="d-grid gap-3 d-md-flex justify-content-md-center mt-4">
-                <a href="{{ url_for('auth.login') }}" class="btn btn-light btn-lg px-5 fw-bold shadow-sm" style="color: var(--primary-color);">Entrar agora</a>
-                <button type="button" class="btn btn-outline-light btn-lg px-5 fw-bold" data-bs-toggle="modal" data-bs-target="#cadastroModal">Criar conta grátis</button>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg px-5 fw-bold shadow-sm">Entrar agora</a>
+                <button type="button" class="btn btn-outline-primary btn-lg px-5 fw-bold" data-bs-toggle="modal" data-bs-target="#cadastroModal">Criar conta grátis</button>
             </div>
         {% endif %}
     </div>
@@ -33,12 +33,10 @@
                 <h5 class="card-title fw-bold text-dark mb-2">{{ produto.nome }}</h5>
                 <p class="card-text text-muted small mb-0">{{ produto.descricao }}</p>
             </div>
-            <div class="card-footer bg-white border-0 p-4 pt-0">
-                <button class="btn btn-outline-primary w-100 fw-bold rounded-pill">Ver Detalhes</button>
-            </div>
         </div>
     </div>
     {% else %}
+
     <div class="col-12 text-center py-5">
         <div class="alert alert-light border shadow-sm">
             <p class="mb-0 text-muted">Nenhum produto em destaque no momento. Volte em breve!</p>

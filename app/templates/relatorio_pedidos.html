@@ -5,10 +5,10 @@
 
 <div class="row mt-4 g-4">
     <div class="col-md-3">
-        <div class="card h-100 shadow border-0" style="background: linear-gradient(135deg, var(--primary-color) 0%, #1b5e20 100%); color: white;">
+        <div class="card h-100 shadow-sm border-0 bg-white">
             <div class="card-body text-center d-flex flex-column justify-content-center p-4">
-                <h6 class="card-title text-uppercase fw-bold opacity-75 small mb-3">Total Geral</h6>
-                <p class="card-text display-4 fw-bold mb-0">{{ metricas.total }}</p>
+                <h6 class="card-title text-uppercase fw-bold text-primary small mb-3">Total Geral</h6>
+                <p class="card-text display-4 fw-bold mb-0 text-dark">{{ metricas.total }}</p>
             </div>
         </div>
     </div>
@@ -39,9 +39,9 @@
 </div>
 
 <h3 class="mb-4 mt-5 fw-bold">Lista Detalhada de Pedidos</h3>
-<div class="table-responsive shadow-sm rounded">
+<div class="table-responsive shadow-sm rounded border">
     <table class="table table-hover align-middle mb-0">
-        <thead class="table-dark">
+        <thead>
             <tr>
                 <th>ID</th>
                 <th>Descrição</th>
